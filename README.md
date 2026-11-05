@@ -3,6 +3,8 @@
 **本地优先、Git 驱动的 Robotics / Embodied AI 博士申请与学术套磁全周期工作台。**  
 **A local-first, Git-driven workspace for Robotics / Embodied AI Ph.D. applications, recommendation letters, outreach, SoP compilation, and admissions monitoring.**
 
+> 🔗 **在线 Demo(匿名示例数据,不含任何真实申请信息):** <https://xzwu-ui.github.io/grad-pilot/>
+
 > 目标画像：大连理工大学「大数据管理与应用」本科，GPA 3.4，Direct Ph.D.，目标 **2028 Fall**。研究定位为 Humanoid Whole-Body Loco-Manipulation、Motion Retargeting、RL、Sim-to-Real、Vision / Visuomotor Policy、Behavioral / Robot Foundation Models。硬件经验聚焦 Unitree G1/H2、Inspire 灵巧手与 Jetson Orin NX 闭环部署。
 >
 > **重要事实边界：** 种子库包含 19 个项目（15 个北美 + HKU / CUHK / NUS / NTU）。所有 2028 Fall 截止日和费用都是规划估计；PI 任职、招生状态与“近两年关键词”必须在发送邮件或提交申请前到官网复核。`Safe / Pivot` 只表示组合策略，绝不意味着保证录取。
