@@ -1,0 +1,336 @@
+global_banned_terms:
+  - "Lorem ipsum"
+  - "TBD"
+  - "2027 Fall"
+  - "2026 Fall"
+
+schools:
+  berkeley:
+    track_type: CS
+    department: "Electrical Engineering and Computer Sciences"
+    program_name: "Ph.D. in Electrical Engineering and Computer Sciences"
+    why_school: >-
+      Berkeley EECS offers an exceptional setting for connecting scalable robot learning with
+      rigorous perception, optimization, and control. Its collaborative research culture would
+      allow me to evaluate learning algorithms not only by benchmark performance, but also by
+      their behavior under contact, uncertainty, and physical deployment.
+    why_track: >-
+      Within EECS, I hope to develop representations and training methods that transfer across
+      embodiments while drawing on systems expertise to make high-throughput simulation and
+      real-time robot inference mutually reinforcing.
+    target_pis: [sergey-levine, koushil-sreenath, pieter-abbeel, jitendra-malik]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]
+
+  stanford:
+    track_type: CS
+    department: "Computer Science"
+    program_name: "Ph.D. in Computer Science"
+    why_school: >-
+      Stanford's strength in robot learning, human motion, and interactive perception creates
+      a natural environment for studying humanoid behavior as both a learning problem and a
+      physical-systems problem. I am especially drawn to research that connects large datasets
+      and general representations with careful real-robot evaluation.
+    why_track: >-
+      A Computer Science track would let me foreground scalable visuomotor learning, motion
+      representations, and foundation-model training while retaining hardware experiments as
+      the decisive test of generalization.
+    target_pis: [chelsea-finn, c-karen-liu, shuran-song, jeannette-bohg]
+    banned_terms: ["Robotics Institute", "EECS Ph.D."]
+    track_variants:
+      ME:
+        track_type: ME
+        department: "Mechanical Engineering"
+        program_name: "Ph.D. in Mechanical Engineering"
+        why_school: >-
+          Stanford's combination of human motion, robotics, and mechanical-systems research
+          offers a strong setting for investigating how learned humanoid behavior can respect
+          contact mechanics, whole-body dynamics, and hardware constraints. I would bring a
+          deployment-centered experimental approach to questions of robust motion and interaction.
+        why_track: >-
+          Within Mechanical Engineering, I would emphasize whole-body dynamics, contact-aware
+          control, and experimentally validated sim-to-real methods, using learning to extend
+          rather than obscure physical understanding.
+        target_pis: [c-karen-liu, jeannette-bohg]
+        banned_terms: ["Ph.D. in Computer Science", "Robotics Institute"]
+
+  cmu:
+    track_type: Robotics
+    department: "Robotics Institute"
+    program_name: "Ph.D. in Robotics"
+    why_school: >-
+      The Robotics Institute's integration of learning, dynamics, perception, and fielded
+      robotic systems closely matches the way I want to conduct research. Its breadth would
+      support both fundamental questions about generalist behavior and the systems discipline
+      required to make humanoid experiments reproducible.
+    why_track: >-
+      A robotics-centered program would allow me to combine whole-body dynamics and hardware
+      experimentation with modern representation learning, rather than treating deployment as
+      a final engineering step after algorithm design.
+    target_pis: [deepak-pathak, guanya-shi, zackory-erickson, katerina-fragkiadaki]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "EECS Ph.D."]
+
+  mit:
+    track_type: CS
+    department: "Electrical Engineering and Computer Science"
+    program_name: "Ph.D. in Electrical Engineering and Computer Science"
+    why_school: >-
+      MIT EECS provides a rigorous environment for uniting robot learning, perception, and
+      optimization with experimental systems. I am motivated by the opportunity to investigate
+      generalizable behavior while remaining precise about contact dynamics, uncertainty, and
+      the limits of simulation-derived evidence.
+    why_track: >-
+      In EECS, I would concentrate on scalable reinforcement learning and visuomotor
+      representations, complemented by the mathematical and systems tools needed for reliable
+      real-time deployment.
+    target_pis: [pulkit-agrawal, russ-tedrake, phillip-isola]
+    banned_terms: ["Robotics Institute", "Ph.D. in Mechanical Engineering"]
+    track_variants:
+      ME:
+        track_type: ME
+        department: "Mechanical Engineering"
+        program_name: "Ph.D. in Mechanical Engineering"
+        why_school: >-
+          MIT's mechanical-engineering research environment would support a deeply physical
+          investigation of humanoid loco-manipulation, connecting contact-rich dynamics and
+          control with data-driven adaptation. My goal would be to derive learning methods whose
+          benefits remain visible in carefully controlled hardware experiments.
+        why_track: >-
+          Within Mechanical Engineering, I would foreground dynamics, stability, contact-aware
+          control, and model learning, using large-scale simulation as a tool for mechanistic
+          hypothesis testing as well as policy training.
+        target_pis: [russ-tedrake]
+        banned_terms: ["Ph.D. in Electrical Engineering and Computer Science", "Robotics Institute"]
+
+  umich:
+    track_type: Robotics
+    department: "Robotics"
+    program_name: "Ph.D. in Robotics"
+    why_school: >-
+      Michigan Robotics offers the kind of interdisciplinary setting in which legged dynamics,
+      manipulation, perception, and learning can be studied as one coherent system. I am drawn
+      to its emphasis on scientifically grounded experiments with physically capable robots.
+    why_track: >-
+      The robotics track would let me build on my whole-body deployment experience while
+      deepening the control theory and contact-aware learning needed for reliable humanoid
+      interaction in unstructured settings.
+    target_pis: [jessy-grizzle, nima-fazeli, dmitry-berenson]
+    banned_terms: ["Ph.D. in Computer Science", "Robotics Institute"]
+
+  georgia-tech:
+    track_type: Robotics
+    department: "Robotics Ph.D. (CS/ECE Home Unit)"
+    program_name: "Ph.D. in Robotics"
+    why_school: >-
+      Georgia Tech's combination of agile robot control, robot learning, and strong home-unit
+      expertise is especially well aligned with my interests. I would value an environment where
+      a humanoid policy can be examined simultaneously through its dynamics, representations,
+      perception, and embedded implementation.
+    why_track: >-
+      The interdisciplinary robotics structure would allow me to pair hardware-grounded
+      loco-manipulation with the appropriate CS or ECE intellectual home, keeping the research
+      questions rather than departmental labels at the center.
+    target_pis: [ye-zhao, sehoon-ha, danfei-xu]
+    banned_terms: ["Robotics Institute", "EECS Ph.D."]
+
+  ucsd:
+    track_type: CS
+    department: "Computer Science and Engineering"
+    program_name: "Ph.D. in Computer Science and Engineering"
+    why_school: >-
+      UC San Diego offers compelling depth in embodied learning, 3D perception, simulation,
+      and autonomous systems. I am particularly interested in research that uses visual and
+      interaction data to learn general behavior while preserving a clear connection to robotic
+      geometry and physical execution.
+    why_track: >-
+      CSE would provide the right setting to emphasize large-scale visuomotor learning,
+      simulation infrastructure, and transferable representations for humanoid and dexterous
+      behavior.
+    target_pis: [xiaolong-wang, hao-su, nikolay-atanasov]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]
+
+  ut-austin:
+    track_type: CS
+    department: "Computer Science"
+    program_name: "Ph.D. in Computer Science"
+    why_school: >-
+      UT Austin's strengths in robot learning, computer vision, and humanoid systems make it
+      a stimulating environment for studying behavior that spans perception and whole-body
+      action. I am drawn to the possibility of connecting scalable learning infrastructure with
+      careful experiments on contact-rich robotic tasks.
+    why_track: >-
+      In Computer Science, I would focus on generalizable visuomotor policies, learning from
+      demonstrations and simulation, and evaluation methods that reveal when a representation
+      transfers to new robots and environments.
+    target_pis: [yuke-zhu, luis-sentis, philipp-krahenbuhl]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]
+
+  uiuc:
+    track_type: CS
+    department: "Computer Science"
+    program_name: "Ph.D. in Computer Science"
+    why_school: >-
+      Illinois Computer Science offers strong connections among motion planning, visual
+      perception, simulation, and machine learning. This combination would help me investigate
+      humanoid behavior through both geometric structure and learned representations, with
+      physical experiments used to test their respective contributions.
+    why_track: >-
+      A CS track would let me emphasize learning and perception for embodied systems while
+      retaining motion planning and dynamics as essential structure rather than afterthoughts.
+    target_pis: [kris-hauser, yuxiong-wang, shenlong-wang]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]
+
+  upenn:
+    track_type: Robotics
+    department: "Computer and Information Science / GRASP"
+    program_name: "Ph.D. in Computer and Information Science (GRASP)"
+    why_school: >-
+      Penn's GRASP ecosystem offers an unusually close connection among embodied learning,
+      contact-rich dynamics, robot vision, and experimental platforms. I am attracted to a
+      research culture in which algorithmic claims can be interrogated through physical
+      interaction and cross-disciplinary collaboration.
+    why_track: >-
+      Through CIS and GRASP, I would combine visuomotor learning with whole-body dynamics and
+      dexterous hardware, focusing on representations that remain useful under real contact and
+      sensing conditions.
+    target_pis: [dinesh-jayaraman, michael-posa, kostas-daniilidis]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]
+
+  columbia:
+    track_type: CS
+    department: "Computer Science"
+    program_name: "Ph.D. in Computer Science"
+    why_school: >-
+      Columbia's research in robot learning, world models, 3D interaction, and dexterous
+      manipulation aligns closely with my goal of building adaptable physical intelligence.
+      I would value the opportunity to connect learned models of interaction with direct
+      experimentation on robotic hands and humanoid systems.
+    why_track: >-
+      In Computer Science, I would investigate interaction-grounded representations and
+      generalizable policies, using large-scale simulation and real-robot data in complementary
+      roles.
+    target_pis: [boyuan-chen, yunzhu-li, matei-ciocarlie]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]
+
+  nyu:
+    track_type: CS
+    department: "Computer Science, Courant Institute"
+    program_name: "Ph.D. in Computer Science"
+    why_school: >-
+      NYU Courant offers an exciting environment for studying scalable robot learning alongside
+      modern visual representation learning. Its research directions would help me examine how
+      real-world interaction data and large-scale pretraining can produce behaviors that remain
+      robust outside controlled benchmarks.
+    why_track: >-
+      A CS track would allow me to focus on foundation-scale visuomotor learning, data-efficient
+      adaptation, and representations that connect visual understanding with physical action.
+    target_pis: [lerrel-pinto, saining-xie]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]
+
+  uw-seattle:
+    track_type: CS
+    department: "Paul G. Allen School of Computer Science & Engineering"
+    program_name: "Ph.D. in Computer Science & Engineering"
+    why_school: >-
+      The Allen School's depth in manipulation, robot learning, perception, and human-robot
+      interaction would be an excellent fit for my hardware-grounded research approach. I am
+      especially interested in combining real-world robot experience with principled methods
+      for generalization and planning under uncertainty.
+    why_track: >-
+      In CSE, I would foreground embodied representation learning and adaptive control policies
+      while leveraging strong connections to perception and robotic systems.
+    target_pis: [abhishek-gupta, dieter-fox, siddhartha-srinivasa]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]
+
+  usc:
+    track_type: CS
+    department: "Computer Science"
+    program_name: "Ph.D. in Computer Science"
+    why_school: >-
+      USC's work in learning from visual and human interaction provides a compelling setting
+      for developing robots that adapt to people and unstructured environments. I would bring
+      hands-on experience with full-body robotic systems to research questions involving
+      generalization, feedback, and collaborative behavior.
+    why_track: >-
+      A Computer Science track would let me concentrate on visuomotor representations,
+      interaction-based learning, and data-driven adaptation supported by reproducible robot
+      experiments.
+    target_pis: [joseph-lim, stefanos-nikolaidis]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]
+
+  maryland:
+    track_type: CS
+    department: "Computer Science"
+    program_name: "Ph.D. in Computer Science"
+    why_school: >-
+      Maryland's strengths in robot planning, physically based simulation, human motion, and
+      autonomous systems offer a strong foundation for cross-disciplinary humanoid research.
+      I am interested in using simulation not merely for scale, but as a controlled setting for
+      understanding motion, perception, and interaction.
+    why_track: >-
+      In Computer Science, I would integrate geometric and learning-based methods for humanoid
+      behavior, with particular attention to simulation fidelity and transfer to physical systems.
+    target_pis: [ming-lin, dinesh-manocha, pratap-tokekar]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]
+
+  hku:
+    track_type: CS
+    department: "Computer Science"
+    program_name: "Ph.D. in Computer Science"
+    why_school: >-
+      HKU's combination of robot planning, dexterous manipulation, 3D vision, and multimodal
+      learning makes it a compelling place to pursue embodied intelligence. I would value its
+      international research environment and the opportunity to connect physically grounded
+      robotics with scalable visual learning.
+    why_track: >-
+      Within Computer Science, I would emphasize motion and visuomotor representations, learning
+      from simulation and demonstration, and reliable deployment on humanoid and dexterous
+      platforms.
+    target_pis: [jia-pan, ping-luo, yizhou-yu]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]
+
+  cuhk:
+    track_type: CS
+    department: "Computer Science and Engineering"
+    program_name: "Ph.D. in Computer Science and Engineering"
+    why_school: >-
+      CUHK offers strong connections among robotic control, visual servoing, multimodal
+      perception, and embodied learning. I am attracted to a research environment where my
+      experience with integrated robot hardware can complement new work in general-purpose
+      perception and action.
+    why_track: >-
+      In CSE, I would focus on multimodal visuomotor policies and 3D representations while
+      preserving close ties to robot control and experimental validation.
+    target_pis: [hongsheng-li, yun-hui-liu, max-q-h-meng]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]
+
+  nus:
+    track_type: CS
+    department: "School of Computing"
+    program_name: "Ph.D. in Computer Science"
+    why_school: >-
+      NUS combines expertise in decision-making under uncertainty, robot perception, tactile
+      manipulation, and robot learning. This breadth would support my aim of developing
+      humanoid policies that are simultaneously data-efficient, uncertainty-aware, and grounded
+      in physical interaction.
+    why_track: >-
+      At the School of Computing, I would focus on learning and decision-making for embodied
+      agents, combining MDP-based reasoning with scalable visuomotor training and real-robot
+      validation.
+    target_pis: [lin-shao, harold-soh, david-hsu, gim-hee-lee]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]
+
+  ntu:
+    track_type: Robotics
+    department: "College of Computing and Data Science / EEE"
+    program_name: "Ph.D. by Research (Robotics and Embodied AI)"
+    why_school: >-
+      NTU's strengths in embodied foundation models, robotic perception, motion planning, and
+      autonomous systems make it a promising environment for interdisciplinary humanoid research.
+      I would value the opportunity to work across computing and engineering boundaries while
+      maintaining a strong experimental focus.
+    why_track: >-
+      A robotics-oriented path would let me combine embodied representations with motion,
+      contact, and system-level evaluation, while selecting the precise admitting school in
+      consultation with a prospective supervisor.
+    target_pis: [ziwei-liu, pham-quang-cuong, han-wang]
+    banned_terms: ["Ph.D. in Mechanical Engineering", "Robotics Institute"]

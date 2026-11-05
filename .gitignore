@@ -1,0 +1,53 @@
+# Private source-of-truth files: never commit real names, emails or progress.
+data/*.private.json
+data/*.private.yaml
+data/applications.json
+data/profile.local.yaml
+
+# Browser synchronization may contain private data.
+dashboard/data.js
+dashboard/*.private.json
+
+# Google OAuth client secrets and cached tokens. Keep only the setup guide in Git.
+credentials/*.json
+
+# Generated drafts, compiled SoPs, monitoring snapshots and logs.
+dist/
+out/
+.state/
+*.log
+
+# Python / uv.
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# LaTeX intermediates (PDF deliverables live under ignored dist/).
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.xdv
+
+# Editors and OS metadata.
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~

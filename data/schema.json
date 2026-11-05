@@ -1,0 +1,412 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://grad-pilot.local/schema.json",
+  "title": "GradPilot application database",
+  "type": "object",
+  "required": ["schema_version", "cycle", "applicant", "recommenders", "assets", "schools", "budget_items", "settings"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "cycle": {
+      "type": "object",
+      "required": ["target_term", "degree", "as_of", "deadlines_are_estimated", "timezone"],
+      "properties": {
+        "target_term": {"type": "string", "minLength": 4},
+        "degree": {"type": "string", "minLength": 2},
+        "as_of": {"type": "string", "format": "date"},
+        "deadlines_are_estimated": {"type": "boolean"},
+        "timezone": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": true
+    },
+    "applicant": {
+      "type": "object",
+      "required": ["name", "email", "target_term"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "email": {"type": "string", "minLength": 3},
+        "target_term": {"type": "string", "minLength": 4},
+        "gpa": {"type": ["number", "null"], "minimum": 0},
+        "gpa_scale": {"type": "number", "exclusiveMinimum": 0},
+        "research_years": {"type": ["number", "null"], "minimum": 0},
+        "publication_count": {"type": ["integer", "null"], "minimum": 0},
+        "research_keywords": {"type": "array", "items": {"type": "string", "minLength": 2}}
+      },
+      "additionalProperties": true
+    },
+    "recommenders": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/recommender"}
+    },
+    "assets": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/asset"}
+    },
+    "documents": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/document"}
+    },
+    "tasks": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/task"}
+    },
+    "essays": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/essay"}
+    },
+    "schools": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/school"}
+    },
+    "budget_items": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/budgetItem"}
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "currency": {"const": "USD"},
+        "cny_per_usd": {"type": "number", "exclusiveMinimum": 0},
+        "follow_up_after_days": {"type": "integer", "minimum": 1},
+        "deadline_warning_days": {"type": "integer", "minimum": 1},
+        "pinned_items": {
+          "type": "array",
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^(document|essay):[a-z0-9][a-z0-9-]*$"}
+        }
+      },
+      "additionalProperties": true
+    },
+    "gmail_imports": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/gmailImport"}
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "nullableDate": {
+      "anyOf": [{"type": "string", "format": "date"}, {"type": "null"}]
+    },
+    "recommender": {
+      "type": "object",
+      "required": ["id", "name", "display_name", "institution", "email"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "name": {"type": "string", "minLength": 1},
+        "display_name": {"type": "string", "minLength": 1},
+        "institution": {"type": "string"},
+        "email": {"type": "string"},
+        "relationship": {"type": "string"},
+        "priority": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": true
+    },
+    "asset": {
+      "type": "object",
+      "required": ["id", "label", "url", "verified", "last_checked"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "label": {"type": "string", "minLength": 1},
+        "url": {"type": "string"},
+        "verified": {"type": "boolean"},
+        "last_checked": {"$ref": "#/$defs/nullableDate"},
+        "note": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "contact": {
+      "type": "object",
+      "required": ["status", "last_contacted", "next_follow_up"],
+      "properties": {
+        "status": {
+          "enum": ["not_started", "drafted", "sent", "follow_up_sent", "replied", "meeting", "closed"]
+        },
+        "last_contacted": {"$ref": "#/$defs/nullableDate"},
+        "next_follow_up": {"$ref": "#/$defs/nullableDate"},
+        "notes": {"type": "string"},
+        "history": {"type": "array", "items": {"$ref": "#/$defs/contactEvent"}},
+        "draft_versions": {"type": "array", "items": {"$ref": "#/$defs/emailDraft"}}
+      },
+      "additionalProperties": true
+    },
+    "pi": {
+      "type": "object",
+      "required": ["id", "name", "lab", "homepage", "email", "recent_work_keywords", "fit_score", "verification_status", "contact"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "name": {"type": "string", "minLength": 2},
+        "lab": {"type": "string"},
+        "homepage": {"type": "string"},
+        "email": {"type": "string"},
+        "recent_work_keywords": {
+          "type": "array",
+          "minItems": 2,
+          "items": {"type": "string", "minLength": 2}
+        },
+        "fit_score": {"type": "integer", "minimum": 1, "maximum": 5},
+        "verification_status": {"enum": ["needs_2026_review", "verified_official"]},
+        "admissions_status": {"enum": ["unknown", "expected_open", "accepting", "not_accepting"]},
+        "last_verified": {"$ref": "#/$defs/nullableDate"},
+        "shortlisted": {"type": "boolean"},
+        "shortlisted_on": {"$ref": "#/$defs/nullableDate"},
+        "paper_title": {"type": "string"},
+        "paper_url": {"type": "string"},
+        "paper_notes": {"type": "string"},
+        "fit_note": {"type": "string"},
+        "meeting_on": {"$ref": "#/$defs/nullableDate"},
+        "meeting_notes": {"type": "string"},
+        "contact": {"$ref": "#/$defs/contact"}
+      },
+      "additionalProperties": true
+    },
+    "assignment": {
+      "type": "object",
+      "required": ["recommender_id", "status", "submitted_on"],
+      "properties": {
+        "recommender_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "status": {"enum": ["pending", "submitted"]},
+        "submitted_on": {"$ref": "#/$defs/nullableDate"}
+      },
+      "additionalProperties": true
+    },
+    "school": {
+      "type": "object",
+      "required": ["id", "name", "aliases", "country", "region", "tier", "department_track", "track_type", "program_name", "deadline", "deadline_type", "deadline_verified", "portal_url", "status", "target_pis", "recommendations", "budget", "notes"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "name": {"type": "string", "minLength": 2},
+        "aliases": {"type": "array", "items": {"type": "string"}},
+        "country": {"type": "string"},
+        "region": {"enum": ["North America", "Asia", "Europe", "Other"]},
+        "tier": {"enum": ["Reach", "Match", "Safe / Pivot"]},
+        "department_track": {"type": "string", "minLength": 2},
+        "track_type": {"enum": ["CS", "Robotics", "ME"]},
+        "program_name": {"type": "string", "minLength": 2},
+        "deadline": {"type": "string", "format": "date-time"},
+        "deadline_type": {"type": "string"},
+        "deadline_verified": {"type": "boolean"},
+        "portal_url": {"type": "string"},
+        "application_id": {"type": ["string", "null"], "maxLength": 128},
+        "submission_date": {"$ref": "#/$defs/nullableDate"},
+        "interview_date": {"$ref": "#/$defs/nullableDate"},
+        "status": {"enum": ["Researching", "Preparing", "Submitted", "Interview", "Waitlisted", "Admitted", "Closed"]},
+        "target_pis": {"type": "array", "items": {"$ref": "#/$defs/pi"}},
+        "recommendations": {
+          "type": "object",
+          "required": ["required", "assignments"],
+          "properties": {
+            "required": {"type": "integer", "minimum": 0, "maximum": 6},
+            "assignments": {"type": "array", "items": {"$ref": "#/$defs/assignment"}}
+          },
+          "additionalProperties": true
+        },
+        "application_checklist": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/checklistItem"}
+        },
+        "plan_version": {"type": "integer", "minimum": 0},
+        "budget": {
+          "type": "object",
+          "required": ["application_fee_usd", "score_report_usd", "other_usd", "fee_waiver"],
+          "properties": {
+            "application_fee_usd": {"type": "number", "minimum": 0},
+            "score_report_usd": {"type": "number", "minimum": 0},
+            "other_usd": {"type": "number", "minimum": 0},
+            "fee_waiver": {"type": "boolean"}
+          },
+          "additionalProperties": true
+        },
+        "notes": {"type": "string"},
+        "funding": {"$ref": "#/$defs/funding"},
+        "application_policy": {"$ref": "#/$defs/applicationPolicy"},
+        "decision": {"$ref": "#/$defs/decision"}
+      },
+      "additionalProperties": true
+    },
+    "funding": {
+      "type": "object",
+      "properties": {
+        "types": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "consideration": {"enum": ["unknown", "automatic", "separate", "none"]},
+        "deadline": {"$ref": "#/$defs/nullableDate"},
+        "source_url": {"type": "string"},
+        "verified": {"type": "boolean"},
+        "last_verified": {"$ref": "#/$defs/nullableDate"},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "applicationPolicy": {
+      "type": "object",
+      "properties": {
+        "supervisor_contact": {"enum": ["unknown", "allowed", "discouraged", "prohibited"]},
+        "interview": {"enum": ["unknown", "required", "not_required"]},
+        "source_url": {"type": "string"},
+        "verified": {"type": "boolean"},
+        "last_verified": {"$ref": "#/$defs/nullableDate"}
+      },
+      "additionalProperties": true
+    },
+    "decision": {
+      "type": "object",
+      "properties": {
+        "close_reason": {"anyOf": [{"enum": ["not_applying", "rejected", "withdrawn", "declined_offer"]}, {"type": "null"}]},
+        "decision_date": {"$ref": "#/$defs/nullableDate"},
+        "response_deadline": {"$ref": "#/$defs/nullableDate"},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "gmailImport": {
+      "type": "object",
+      "required": ["gmail_message_id", "batch_id", "applied_at", "school_id", "message_date", "fields"],
+      "properties": {
+        "gmail_message_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "batch_id": {"type": "string", "minLength": 1, "maxLength": 64},
+        "applied_at": {"type": "string", "format": "date-time"},
+        "school_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "message_date": {"$ref": "#/$defs/nullableDate"},
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["application_id", "submission_date", "interview_date", "status", "decision_date", "close_reason"]}
+        }
+      },
+      "additionalProperties": false
+    },
+    "budgetItem": {
+      "type": "object",
+      "required": ["id", "label", "amount_usd", "enabled", "category"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "label": {"type": "string", "minLength": 1},
+        "amount_usd": {"type": "number", "minimum": 0},
+        "enabled": {"type": "boolean"},
+        "category": {"enum": ["testing", "documents", "services", "other"]}
+      },
+      "additionalProperties": true
+    },
+    "document": {
+      "type": "object",
+      "required": ["id", "label", "category", "status", "file_path", "version", "updated_on", "school_ids", "notes"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "label": {"type": "string", "minLength": 1},
+        "category": {"enum": ["transcript", "cv", "sop", "phs", "essay", "paper", "test_score", "lor", "portfolio", "other"]},
+        "status": {"enum": ["missing", "draft", "in_review", "final", "submitted", "archived"]},
+        "file_path": {"type": "string"},
+        "version": {"type": "string"},
+        "updated_on": {"$ref": "#/$defs/nullableDate"},
+        "school_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"}},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "task": {
+      "type": "object",
+      "required": ["id", "title", "school_id", "due_date", "category", "status", "depends_on", "notes"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "title": {"type": "string", "minLength": 1},
+        "school_id": {"type": ["string", "null"], "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "due_date": {"type": "string", "format": "date"},
+        "category": {"enum": ["research", "outreach", "documents", "writing", "recommendations", "application", "other"]},
+        "status": {"enum": ["todo", "in_progress", "done", "skipped"]},
+        "depends_on": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"}},
+        "notes": {"type": "string"},
+        "season_phase": {"type": ["string", "null"], "enum": ["foundation", "discovery", "writing", "submission", "decisions", "transition", null]},
+        "season_term": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "checklistItem": {
+      "type": "object",
+      "required": ["id", "label", "category", "required", "status", "document_id", "source_url", "verified", "notes", "completed_on"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "label": {"type": "string", "minLength": 1},
+        "category": {"enum": ["research", "documents", "writing", "recommendations", "application"]},
+        "required": {"type": "boolean"},
+        "status": {"enum": ["not_started", "in_progress", "ready", "submitted", "not_required"]},
+        "document_id": {"type": ["string", "null"], "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "source_url": {"type": "string"},
+        "verified": {"type": "boolean"},
+        "notes": {"type": "string"},
+        "completed_on": {"$ref": "#/$defs/nullableDate"}
+      },
+      "additionalProperties": true
+    },
+    "essayVersion": {
+      "type": "object",
+      "required": ["id", "created_at", "content", "word_count", "note"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "content": {"type": "string"},
+        "word_count": {"type": "integer", "minimum": 0},
+        "note": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "review": {
+      "type": "object",
+      "required": ["id", "reviewer", "created_on", "comment", "resolved"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "reviewer": {"type": "string", "minLength": 1},
+        "created_on": {"type": "string", "format": "date"},
+        "comment": {"type": "string", "minLength": 1},
+        "resolved": {"type": "boolean"}
+      },
+      "additionalProperties": true
+    },
+    "essay": {
+      "type": "object",
+      "required": ["id", "school_id", "type", "title", "content", "word_limit", "status", "versions", "reviews", "updated_at"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "school_id": {"type": ["string", "null"], "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "type": {"enum": ["SoP", "PS", "PHS", "CV", "Short Essay", "Research Statement", "Other"]},
+        "title": {"type": "string", "minLength": 1},
+        "content": {"type": "string"},
+        "word_limit": {"type": "integer", "minimum": 0, "maximum": 20000},
+        "status": {"enum": ["draft", "in_review", "final", "submitted", "archived"]},
+        "versions": {"type": "array", "items": {"$ref": "#/$defs/essayVersion"}},
+        "reviews": {"type": "array", "items": {"$ref": "#/$defs/review"}},
+        "updated_at": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": true
+    },
+    "contactEvent": {
+      "type": "object",
+      "required": ["id", "date", "kind", "subject", "notes"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "date": {"type": "string", "format": "date"},
+        "kind": {"enum": ["initial", "follow_up", "call", "meeting", "email", "note"]},
+        "subject": {"type": "string"},
+        "notes": {"type": "string"},
+        "questions": {"type": "string"},
+        "outcomes": {"type": "string"},
+        "funding_notes": {"type": "string"},
+        "next_action": {"type": "string"},
+        "follow_up_date": {"$ref": "#/$defs/nullableDate"}
+      },
+      "additionalProperties": true
+    },
+    "emailDraft": {
+      "type": "object",
+      "required": ["id", "created_at", "kind", "subject", "body", "note"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "kind": {"enum": ["initial", "follow_up"]},
+        "subject": {"type": "string", "minLength": 1},
+        "body": {"type": "string"},
+        "note": {"type": "string"}
+      },
+      "additionalProperties": true
+    }
+  }
+}

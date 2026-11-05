@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="GradPilot — local-first Robotics / Embodied AI PhD application mission control">
+  <title>GradPilot · PhD Application Mission Control</title>
+  <script>
+    tailwind = { config: { corePlugins: { preflight: false } } };
+  </script>
+  <script src="https://cdn.tailwindcss.com" defer></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="viz-root">
+  <a class="skip-link" href="#main-content">跳转到工作区</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="主导航">
+      <div class="brand-block">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="24" r="19" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="24" cy="24" r="4" fill="currentColor"/>
+            <path d="M24 5v10M24 33v10M5 24h10M33 24h10M11 11l7 7M30 30l7-7M11 37l7-7M30 30l7 7" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">GRAD<span>PILOT</span></div>
+          <div class="brand-sub">ROBOTICS PH.D. / LOCAL</div>
+        </div>
+      </div>
+
+      <nav class="nav-stack">
+        <button class="nav-item active" data-action="navigate" data-view="overview" aria-current="page">
+          <span class="nav-index">01</span><span>任务总览</span><span class="nav-en">OVERVIEW</span>
+        </button>
+        <button class="nav-item" data-action="navigate" data-view="season">
+          <span class="nav-index">02</span><span>申请季</span><span class="nav-en">SEASON</span>
+        </button>
+        <button class="nav-item" data-action="navigate" data-view="tasks">
+          <span class="nav-index">03</span><span>规划时间线</span><span class="nav-en">TIMELINE</span>
+        </button>
+        <button class="nav-item" data-action="navigate" data-view="applications">
+          <span class="nav-index">04</span><span>选校与清单</span><span class="nav-en">SCHOOLS</span>
+        </button>
+        <button class="nav-item" data-action="navigate" data-view="materials">
+          <span class="nav-index">05</span><span>材料中心</span><span class="nav-en">MATERIALS</span>
+        </button>
+        <button class="nav-item" data-action="navigate" data-view="essays">
+          <span class="nav-index">06</span><span>文书与审阅</span><span class="nav-en">WRITING</span>
+        </button>
+        <button class="nav-item" data-action="navigate" data-view="lor">
+          <span class="nav-index">07</span><span>推荐信矩阵</span><span class="nav-en">LETTERS</span>
+        </button>
+        <button class="nav-item" data-action="navigate" data-view="outreach">
+          <span class="nav-index">08</span><span>套磁研究</span><span class="nav-en">OUTREACH</span>
+        </button>
+        <button class="nav-item" data-action="navigate" data-view="budget">
+          <span class="nav-index">09</span><span>半 DIY 预算</span><span class="nav-en">BUDGET</span>
+        </button>
+        <button class="nav-item" data-action="navigate" data-view="assets">
+          <span class="nav-index">10</span><span>资产与设置</span><span class="nav-en">ASSETS</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="local-badge"><span class="pulse-dot"></span> LOCAL-FIRST / NO CLOUD DB</div>
+        <p>数据只保存在此浏览器与导出的 JSON 中。材料正文保存在你指定的本地路径，定期导出并私密备份。</p>
+        <button class="text-button" data-action="toggle-theme" id="theme-toggle">◐ 切换深色模式</button>
+      </div>
+    </aside>
+
+    <main id="main-content" class="main-stage" tabindex="-1">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow" id="view-eyebrow">MISSION CONTROL / 01</div>
+          <h1 id="view-title">申请任务总览</h1>
+        </div>
+        <div class="topbar-actions">
+          <span class="cycle-chip" id="cycle-chip">2028 FALL</span>
+          <span class="save-state" id="save-state" role="status">本地工作区</span>
+          <input type="file" id="import-file" accept="application/json,.json" hidden>
+          <button class="button button-ghost" data-action="import">↓ 导入 JSON</button>
+          <button class="button button-primary" data-action="export">↑ 导出备份</button>
+        </div>
+      </header>
+
+      <div id="source-notice" class="source-notice" hidden></div>
+      <div id="global-alert" class="global-alert" hidden></div>
+
+      <section id="view-overview" class="view-panel active" aria-label="任务总览"></section>
+      <section id="view-season" class="view-panel" aria-label="全局申请季" hidden></section>
+      <section id="view-tasks" class="view-panel" aria-label="规划时间线" hidden></section>
+      <section id="view-applications" class="view-panel" aria-label="选校与逐校清单" hidden></section>
+      <section id="view-materials" class="view-panel" aria-label="材料中心" hidden></section>
+      <section id="view-essays" class="view-panel" aria-label="文书与审阅" hidden></section>
+      <section id="view-lor" class="view-panel" aria-label="推荐信矩阵" hidden></section>
+      <section id="view-outreach" class="view-panel" aria-label="套磁研究追踪" hidden></section>
+      <section id="view-budget" class="view-panel" aria-label="半 DIY 预算" hidden></section>
+      <section id="view-assets" class="view-panel" aria-label="资产与设置" hidden></section>
+
+      <footer class="workspace-footer">
+        <span>GRADPILOT / BUILD 0.4.0</span>
+        <span>评分仅表示信息匹配与准备度；示例截止日带 ~ 标记，提交前必须核验官网。</span>
+      </footer>
+    </main>
+  </div>
+
+  <dialog id="school-dialog" class="dialog dialog-wide">
+    <form id="school-form" method="post">
+      <div class="dialog-head"><div><span class="eyebrow">PROGRAM RECORD</span><h2 id="school-dialog-title">添加申请项目</h2></div><button type="button" class="icon-button" data-action="close-dialog" data-dialog="school-dialog" aria-label="关闭">×</button></div>
+      <input type="hidden" name="original_id">
+      <div class="form-grid">
+        <label>学校全称<input name="name" required maxlength="160"></label>
+        <label>唯一 ID<input name="id" required pattern="[a-z0-9][a-z0-9\-]*" placeholder="stanford-me"></label>
+        <label>组合层级<select name="tier"><option>Reach</option><option>Match</option><option>Safe / Pivot</option></select></label>
+        <label>Track 类型<select name="track_type"><option>CS</option><option>Robotics</option><option>ME</option></select></label>
+        <label>地区<select name="region"><option>North America</option><option>Asia</option><option>Europe</option><option>Other</option></select></label>
+        <label>国家 / 地区<input name="country" required></label>
+        <label class="span-2">院系 / Home Unit<input name="department_track" required placeholder="CS / ECE / Robotics Institute"></label>
+        <label class="span-2">项目全称<input name="program_name" required></label>
+        <label>规划截止日<input type="datetime-local" name="deadline_local" required></label>
+        <label>UTC 偏移<input name="deadline_offset" required pattern="[+\-](0[0-9]|1[0-4]):[0-5][0-9]" placeholder="-08:00"></label>
+        <label>申请费 USD<input type="number" name="application_fee_usd" min="0" step="0.01" required></label>
+        <label>成绩送分 USD<input type="number" name="score_report_usd" min="0" step="0.01" required></label>
+        <label>推荐信数量<input type="number" name="lor_required" min="0" max="6" step="1" required></label>
+        <label>申请状态<select name="status"><option>Researching</option><option>Preparing</option><option>Submitted</option><option>Interview</option><option>Waitlisted</option><option>Admitted</option><option>Closed</option></select></label>
+        <label class="span-2">项目官网<input type="url" name="portal_url" placeholder="https://..." required></label>
+        <label>网申申请编号<input name="application_id" maxlength="128" placeholder="学校 portal 中的 Application ID"></label>
+        <label>实际提交日期<input type="date" name="submission_date"></label>
+        <label>面试日期<input type="date" name="interview_date"></label>
+        <label class="span-2">别名（逗号分隔）<input name="aliases" placeholder="MIT, Massachusetts Institute of Technology"></label>
+        <label class="span-2">策略备注<textarea name="notes" rows="3"></textarea></label>
+        <label class="check-label span-2"><input type="checkbox" name="deadline_verified"> 已在官网核验截止日（未勾选时显示 ~）</label>
+        <h3 class="span-2 form-section">Funding / 经费与申请政策</h3>
+        <label class="span-2">经费来源（逗号分隔）<input name="funding_types" placeholder="Departmental, University, External"><small>可填院系、学校、助教 / 助研、外部奖学金等；不要填写尚无依据的金额。</small></label>
+        <label>Funding 考虑方式<select name="funding_consideration"><option value="unknown">未知</option><option value="automatic">自动考虑</option><option value="separate">需要单独申请</option><option value="none">无经费</option></select></label>
+        <label>Funding 截止日<input type="date" name="funding_deadline"></label>
+        <label class="span-2">Funding 官方来源<input type="url" name="funding_source_url" placeholder="https://..."></label>
+        <label class="check-label span-2"><input type="checkbox" name="funding_verified"> 已核验 funding 考虑方式与截止日</label>
+        <label class="span-2">Funding 备注<textarea name="funding_notes" rows="2" placeholder="assistantship、fellowship、学费减免或单独申请要求"></textarea></label>
+        <label>联系导师政策<select name="supervisor_contact"><option value="unknown">未知</option><option value="allowed">允许联系</option><option value="discouraged">不鼓励联系</option><option value="prohibited">禁止联系</option></select></label>
+        <label>面试要求<select name="interview_requirement"><option value="unknown">未知</option><option value="required">要求 / 可能面试</option><option value="not_required">无面试</option></select></label>
+        <label class="span-2">申请政策官方来源<input type="url" name="policy_source_url" placeholder="https://..."></label>
+        <label class="check-label span-2"><input type="checkbox" name="policy_verified"> 已核验导师联系政策与面试要求</label>
+        <h3 class="span-2 form-section">Decision / 结果与回复</h3>
+        <label>结果记录日期<input type="date" name="decision_date"></label>
+        <label>Offer / 结果回复截止日<input type="date" name="response_deadline"></label>
+        <label>Closed 原因<select name="close_reason"><option value="">未说明 / 仅关闭</option><option value="not_applying">不再申请</option><option value="rejected">被拒</option><option value="withdrawn">主动撤回</option><option value="declined_offer">拒绝 Offer</option></select></label>
+        <label>结果备注<input name="decision_notes" placeholder="waitlist、offer 或后续安排"></label>
+      </div>
+      <div class="dialog-actions"><button type="button" class="button button-ghost" data-action="close-dialog" data-dialog="school-dialog">取消</button><button class="button button-primary" type="submit">保存项目</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="pi-dialog" class="dialog dialog-wide">
+    <form id="pi-form" method="post">
+      <div class="dialog-head"><div><span class="eyebrow">PI RESEARCH RECORD</span><h2 id="pi-dialog-title">添加目标 PI</h2></div><button type="button" class="icon-button" data-action="close-dialog" data-dialog="pi-dialog" aria-label="关闭">×</button></div>
+      <input type="hidden" name="school_id"><input type="hidden" name="original_id">
+      <div class="form-grid">
+        <label>姓名<input name="name" required></label>
+        <label>唯一 ID<input name="id" required pattern="[a-z0-9][a-z0-9\-]*" placeholder="first-last"></label>
+        <label class="span-2">实验室<input name="lab"></label>
+        <label class="span-2">近两年代表作关键词（逗号分隔）<input name="recent_work_keywords" required><small>关键词只用于初筛，不能代替具体论文阅读。</small></label>
+        <label>个人主页<input type="url" name="homepage" placeholder="https://..."></label>
+        <label>邮箱（可留空待核验）<input type="email" name="email"></label>
+        <label>匹配度（1–5）<input type="number" name="fit_score" min="1" max="5" required></label>
+        <label>信息状态<select name="verification_status"><option value="needs_2026_review">待官网核验</option><option value="verified_official">已官网核验</option></select></label>
+        <label>招生状态<select name="admissions_status"><option value="unknown">未知</option><option value="expected_open">预期开放（待确认）</option><option value="accepting">已确认接受新生</option><option value="not_accepting">本周期不招生</option></select></label>
+        <label>最近官网核验日期<input type="date" name="last_verified"></label>
+        <label class="check-label span-2"><input type="checkbox" name="shortlisted"> 纳入 Shortlist（优先核验与套磁候选）</label>
+        <label class="span-2">具体论文标题<input name="paper_title" placeholder="只填写真正读过的论文"></label>
+        <label class="span-2">论文 URL<input type="url" name="paper_url" placeholder="https://..."></label>
+        <label class="span-2">论文阅读与匹配笔记<textarea name="paper_notes" rows="4" placeholder="建议用英文记录具体问题、方法和个人研究连接；只有已官网核验且笔记完整时才会进入 CLI 邮件正文。"></textarea></label>
+        <label class="span-2">个性化匹配论证<textarea name="fit_note" rows="3" placeholder="为什么是这个 PI、这个项目，而不是只替换校名？"></textarea></label>
+        <label>联系备注<textarea name="contact_notes" rows="3"></textarea></label>
+      </div>
+      <div class="dialog-actions"><button type="button" class="button button-ghost" data-action="close-dialog" data-dialog="pi-dialog">取消</button><button class="button button-primary" type="submit">保存研究记录</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="document-dialog" class="dialog dialog-wide">
+    <form id="document-form" method="post">
+      <div class="dialog-head"><div><span class="eyebrow">LOCAL MATERIAL RECORD</span><h2 id="document-dialog-title">添加材料</h2></div><button type="button" class="icon-button" data-action="close-dialog" data-dialog="document-dialog" aria-label="关闭">×</button></div>
+      <input type="hidden" name="original_id">
+      <div class="form-grid">
+        <label>材料名称<input name="label" required placeholder="2028 Fall CV"></label>
+        <label>唯一 ID<input name="id" required pattern="[a-z0-9][a-z0-9\-]*" placeholder="cv-master"></label>
+        <label>类别<select name="category"><option value="transcript">成绩单</option><option value="cv">CV</option><option value="sop">SoP / PS</option><option value="phs">PHS</option><option value="essay">项目短文</option><option value="paper">论文 / 预印本</option><option value="test_score">语言 / GRE</option><option value="lor">推荐信材料</option><option value="portfolio">作品集 / Demo</option><option value="other">其他</option></select></label>
+        <label>状态<select name="status"><option value="missing">缺失</option><option value="draft">草稿</option><option value="in_review">审阅中</option><option value="final">已定稿</option><option value="submitted">已提交</option><option value="archived">已归档</option></select></label>
+        <label class="span-2">本地文件路径<input name="file_path" placeholder="例如 C:\Users\you\Documents\GradPilot\cv-v3.pdf"><small>只保存路径，不读取或上传文件内容；浏览器不会伪造文件存在性检查。</small></label>
+        <label>版本标识<input name="version" placeholder="v3 / 2027-11-01"></label>
+        <label>更新日期<input type="date" name="updated_on"></label>
+        <fieldset class="span-2 school-picker"><legend>适用学校（不勾选 = 通用材料）</legend><div id="document-school-options" class="school-picker-grid"></div></fieldset>
+        <label class="span-2">备注<textarea name="notes" rows="3" placeholder="格式要求、缺失项、审阅状态等"></textarea></label>
+      </div>
+      <div class="dialog-actions"><button type="button" class="button button-ghost" data-action="close-dialog" data-dialog="document-dialog">取消</button><button class="button button-primary" type="submit">保存材料</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="task-dialog" class="dialog dialog-wide">
+    <form id="task-form" method="post">
+      <div class="dialog-head"><div><span class="eyebrow">DEPENDENT TASK</span><h2 id="task-dialog-title">添加任务</h2></div><button type="button" class="icon-button" data-action="close-dialog" data-dialog="task-dialog" aria-label="关闭">×</button></div>
+      <input type="hidden" name="original_id">
+      <div class="form-grid">
+        <label class="span-2">任务标题<input name="title" required></label>
+        <label>唯一 ID<input name="id" required pattern="[a-z0-9][a-z0-9\-]*" placeholder="custom-task"></label>
+        <label>关联学校<select name="school_id" id="task-school-options"></select></label>
+        <label>计划完成日<input type="date" name="due_date" required></label>
+        <label>类别<select name="category"><option value="research">选校核验</option><option value="outreach">套磁</option><option value="documents">材料</option><option value="writing">文书</option><option value="recommendations">推荐信</option><option value="application">网申</option><option value="other">其他</option></select></label>
+        <label>状态<select name="status"><option value="todo">待办</option><option value="in_progress">进行中</option><option value="done">已完成</option><option value="skipped">已跳过</option></select></label>
+        <label class="span-2">前置任务 ID（逗号分隔）<input name="depends_on" placeholder="berkeley--task-verify"><small>前置任务完成或跳过后，当前任务才可标记完成。</small></label>
+        <label class="span-2">备注<textarea name="notes" rows="3"></textarea></label>
+      </div>
+      <div class="dialog-actions"><button type="button" class="button button-ghost" data-action="close-dialog" data-dialog="task-dialog">取消</button><button class="button button-primary" type="submit">保存任务</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="checklist-dialog" class="dialog dialog-wide">
+    <form id="checklist-form" method="post">
+      <div class="dialog-head"><div><span class="eyebrow">SCHOOL REQUIREMENT</span><h2 id="checklist-dialog-title">编辑清单项</h2></div><button type="button" class="icon-button" data-action="close-dialog" data-dialog="checklist-dialog" aria-label="关闭">×</button></div>
+      <input type="hidden" name="school_id"><input type="hidden" name="original_id">
+      <div class="form-grid">
+        <label class="span-2">清单项名称<input name="label" required></label>
+        <label>唯一 ID<input name="id" required pattern="[a-z0-9][a-z0-9\-]*"></label>
+        <label>类别<select name="category"><option value="research">官网核验</option><option value="documents">材料</option><option value="writing">文书</option><option value="recommendations">推荐信</option><option value="application">网申</option></select></label>
+        <label>状态<select name="status"><option value="not_started">未开始</option><option value="in_progress">进行中</option><option value="ready">已就绪</option><option value="submitted">已提交</option><option value="not_required">不适用</option></select></label>
+        <label>关联材料<select name="document_id" id="checklist-document-options"></select></label>
+        <label class="span-2">要求来源 URL<input type="url" name="source_url" placeholder="https://..."></label>
+        <label class="span-2">官方要求与备注<textarea name="notes" rows="4" placeholder="字数、文件格式、送分代码等；不要把估计值写成官网事实。"></textarea></label>
+        <label class="check-label"><input type="checkbox" name="required"> 必需项</label>
+        <label class="check-label"><input type="checkbox" name="verified"> 已在官网核验该要求</label>
+      </div>
+      <div class="dialog-actions"><button type="button" class="button button-ghost" data-action="close-dialog" data-dialog="checklist-dialog">取消</button><button class="button button-primary" type="submit">保存清单项</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="essay-dialog" class="dialog dialog-writing">
+    <form id="essay-form" method="post">
+      <div class="dialog-head"><div><span class="eyebrow">VERSIONED WRITING DESK</span><h2 id="essay-dialog-title">新建文书</h2></div><button type="button" class="icon-button" data-action="close-dialog" data-dialog="essay-dialog" aria-label="关闭">×</button></div>
+      <input type="hidden" name="original_id">
+      <div class="form-grid">
+        <label>关联项目<select name="school_id" id="essay-school-options"></select></label>
+        <label>文书类型<select name="type"><option>SoP</option><option>PS</option><option>PHS</option><option>CV</option><option>Short Essay</option><option>Research Statement</option><option>Other</option></select></label>
+        <label class="span-2">标题<input name="title" required placeholder="Berkeley EECS SoP"></label>
+        <label>字数上限（0 = 不限制）<input type="number" name="word_limit" min="0" max="20000" step="1" value="1000"></label>
+        <label>状态<select name="status"><option value="draft">草稿</option><option value="in_review">审阅中</option><option value="final">已定稿</option><option value="submitted">已提交</option><option value="archived">已归档</option></select></label>
+        <label class="span-2">正文<textarea name="content" id="essay-content" rows="22" placeholder="在这里写作；每次正文变化并保存时都会建立新版本。"></textarea></label>
+        <div class="span-2 writing-status" id="essay-lint-preview">0 词 / 字符</div>
+        <label class="span-2">版本备注<input name="version_note" placeholder="例如：补充真机实验个人贡献"></label>
+      </div>
+      <p class="subline">定稿或提交状态会被占位符、超字数、跨校名称和错误入学季检查阻止；警告仍需人工判断。</p>
+      <div class="dialog-actions"><button type="button" class="button button-ghost" data-action="close-dialog" data-dialog="essay-dialog">取消</button><button class="button button-primary" type="submit">保存正文与新版本</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="versions-dialog" class="dialog dialog-writing">
+    <div class="dialog-body">
+      <div class="dialog-head"><div><span class="eyebrow">LINE-BY-LINE HISTORY</span><h2 id="versions-dialog-title">版本对比</h2></div><button type="button" class="icon-button" data-action="close-dialog" data-dialog="versions-dialog" aria-label="关闭">×</button></div>
+      <label>历史版本<select id="essay-version-select" data-action="essay-version-select"></select></label>
+      <p class="subline">左侧标记 − 为历史版本删除内容，+ 为当前版本新增内容。恢复会把历史正文保存为一个新版本。</p>
+      <div id="essay-diff" class="diff-view"></div>
+      <div class="dialog-actions"><button class="button button-ghost button-danger" data-action="revert-essay-version">恢复所选版本为新版本</button><button class="button button-primary" data-action="close-dialog" data-dialog="versions-dialog">完成</button></div>
+    </div>
+  </dialog>
+
+  <dialog id="review-dialog" class="dialog dialog-wide">
+    <div class="dialog-body">
+      <div class="dialog-head"><div><span class="eyebrow">HUMAN REVIEW LOG</span><h2 id="review-dialog-title">审阅意见</h2></div><button type="button" class="icon-button" data-action="close-dialog" data-dialog="review-dialog" aria-label="关闭">×</button></div>
+      <div id="review-list" class="review-list"></div>
+      <form id="review-form" method="post">
+        <input type="hidden" name="essay_id">
+        <div class="form-grid">
+          <label>审阅人<input name="reviewer" required placeholder="导师 / 外籍编辑 / 自己"></label>
+          <label>审阅日期<input type="date" name="created_on" required></label>
+          <label class="span-2">意见<textarea name="comment" rows="4" required placeholder="具体指出事实、逻辑、语言或项目适配问题"></textarea></label>
+        </div>
+        <div class="dialog-actions"><button class="button button-primary" type="submit">添加审阅意见</button></div>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog id="email-draft-dialog" class="dialog dialog-writing">
+    <form id="email-draft-form" method="post">
+      <div class="dialog-head"><div><span class="eyebrow">LOCAL DRAFT HISTORY</span><h2 id="email-draft-dialog-title">套磁邮件草稿</h2></div><button type="button" class="icon-button" data-action="close-dialog" data-dialog="email-draft-dialog" aria-label="关闭">×</button></div>
+      <input type="hidden" name="school_id"><input type="hidden" name="pi_id">
+      <div id="email-draft-history" class="draft-history"></div>
+      <div class="form-grid">
+        <label>草稿类型<select name="kind"><option value="initial">首次套磁</option><option value="follow_up">Follow-up</option></select></label>
+        <label>版本备注<input name="note" placeholder="根据论文反馈修改"></label>
+        <label class="span-2">主题<input name="subject" required></label>
+        <label class="span-2">正文<textarea name="body" rows="18" required placeholder="可粘贴 CLI 生成的英文草稿。这里只保存版本，不会自动发信。"></textarea></label>
+      </div>
+      <div class="dialog-actions"><button type="button" class="button button-ghost" data-action="close-dialog" data-dialog="email-draft-dialog">取消</button><button class="button button-primary" type="submit">保存为新草稿版本</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="interaction-dialog" class="dialog dialog-writing">
+    <div class="dialog-body">
+      <div class="dialog-head"><div><span class="eyebrow">LINKED CONVERSATION LOG</span><h2 id="interaction-dialog-title">交流记录</h2></div><button type="button" class="icon-button" data-action="close-dialog" data-dialog="interaction-dialog" aria-label="关闭">×</button></div>
+      <div id="interaction-history" class="interaction-history"></div>
+      <form id="interaction-form" method="post">
+        <input type="hidden" name="school_id"><input type="hidden" name="pi_id"><input type="hidden" name="original_id">
+        <div class="form-grid">
+          <label>交流类型<select name="kind"><option value="call">询问通话</option><option value="meeting">会议 / 面谈</option><option value="email">邮件往来</option><option value="note">研究备注</option></select></label>
+          <label>交流日期<input type="date" name="date" required></label>
+          <label class="span-2">通话前问题 / 交流目的<textarea name="questions" rows="3" placeholder="招生名额、Funding、研究匹配、申请流程"></textarea></label>
+          <label class="span-2">对方回答 / 关键结论<textarea name="outcomes" rows="4" placeholder="只记录真实交流内容，不推测招生承诺"></textarea></label>
+          <label class="span-2">Funding 与招生线索<textarea name="funding_notes" rows="3" placeholder="经费来源、单独申请、名额与信息来源"></textarea></label>
+          <label class="span-2">下一步行动<textarea name="next_action" rows="2" placeholder="例如：阅读指定论文并在 9 月 1 日前发送 Follow-up"></textarea></label>
+          <label>Follow-up 日期<input type="date" name="follow_up_date"></label>
+        </div>
+        <div class="dialog-actions"><button type="button" class="button button-ghost" data-action="new-interaction">新建记录</button><button class="button button-primary" type="submit">保存交流记录</button></div>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog id="recommender-dialog" class="dialog">
+    <form id="recommender-form" method="post">
+      <div class="dialog-head"><div><span class="eyebrow">LETTER WRITER</span><h2 id="recommender-dialog-title">添加推荐人</h2></div><button type="button" class="icon-button" data-action="close-dialog" data-dialog="recommender-dialog" aria-label="关闭">×</button></div>
+      <input type="hidden" name="original_id">
+      <div class="form-grid">
+        <label>英文称呼<input name="name" required placeholder="Prof. Zhang"></label>
+        <label>看板显示名<input name="display_name" required placeholder="DUT 导师"></label>
+        <label>唯一 ID<input name="id" required pattern="[a-z0-9][a-z0-9\-]*"></label>
+        <label>邮箱<input type="email" name="email"></label>
+        <label class="span-2">单位<input name="institution"></label>
+        <label class="span-2">推荐依据<textarea name="relationship" rows="3" placeholder="科研独立性、真机部署贡献等"></textarea></label>
+      </div>
+      <div class="dialog-actions"><button type="button" class="button button-ghost" data-action="close-dialog" data-dialog="recommender-dialog">取消</button><button class="button button-primary" type="submit">保存推荐人</button></div>
+    </form>
+  </dialog>
+
+  <div id="chart-tooltip" class="chart-tooltip" role="tooltip" hidden><strong></strong><span></span></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="data.js"></script>
+  <script src="modules.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

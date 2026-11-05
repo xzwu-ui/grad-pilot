@@ -1,0 +1,158 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{lmodern}
+\else
+  \usepackage{fontspec}
+\fi
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage[hidelinks,unicode]{hyperref}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\setstretch{1.08}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.72em}
+\definecolor{Ink}{HTML}{172026}
+\definecolor{Accent}{HTML}{B94B2C}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{Accent}Statement of Purpose}
+\fancyhead[R]{\small [[ school.name | tex ]]}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\hypersetup{pdftitle={Statement of Purpose — [[ school.name | tex ]]},pdfauthor={[[ applicant.name | tex ]]}}
+
+\begin{document}
+\color{Ink}
+\begin{center}
+  {\Large\bfseries Statement of Purpose\par}
+  \vspace{0.35em}
+  {\color{Accent}\small [[ school.program_name | tex ]] · [[ school.department | tex ]]\par}
+  \vspace{0.2em}
+  {\small [[ applicant.name | tex ]] · [[ applicant.target_term | tex ]] · Direct Ph.D.\par}
+\end{center}
+\vspace{0.4em}
+
+I want to develop humanoid robots that can move, manipulate, and adapt as integrated physical
+systems rather than as collections of isolated perception and control modules. My immediate
+research goal is to learn generalizable whole-body loco-manipulation policies that remain
+reliable under contact, sensory noise, and changes in embodiment. This goal grows directly from
+my experience taking reinforcement-learning controllers through the complete sim-to-real loop on
+Unitree G1 and H2 humanoids with Inspire dexterous hands. I have worked not only with policy
+training, but also with the onboard perception, real-time software, deployment diagnostics, and
+physical iteration required to make a learned controller function outside a simulator. For my
+doctoral research, I hope to join a group where new learning methods and demanding real-robot
+experiments can inform one another from the outset.
+
+My undergraduate major, Big Data Management and Applications at Dalian University of Technology,
+gives me a complementary rather than disconnected foundation for this agenda. Training in
+mathematical modeling, probability, statistics, optimization, and large-scale data systems taught
+me to formulate decisions in terms of objectives, uncertainty, constraints, and evidence. Concepts
+such as Markov decision processes and statistical decision theory connect naturally to reinforcement
+learning, while data-pipeline engineering connects to the less visible but decisive work of
+collecting trajectories, managing simulation experiments, aligning multimodal observations, and
+evaluating policy behavior at scale. I therefore see my interdisciplinary background as a route
+into behavioral foundation models: large-scale simulation and robot data require both learning
+algorithms and disciplined systems for producing, governing, and interpreting data. The central
+lesson I carry from this preparation is the ability to convert mathematical and computational
+ideas into functioning robotic experiments.
+
+In my humanoid loco-manipulation work, I used Isaac Lab, mjlab, and MuJoCo with PyTorch to
+construct training and evaluation workflows for coordinated whole-body behavior. Motion
+retargeting provided a way to transform human or reference motion into embodiment-aware targets,
+while reinforcement learning enabled the controller to recover behavior that was dynamically
+feasible under robot constraints. ROS 2 connected policy inference with perception and control
+components, and ONNX Runtime provided an explicit deployment path outside the training framework.
+This combination changed how I evaluate a policy: visually plausible simulation rollouts are not
+sufficient unless observation definitions, action interfaces, contact behavior, timing, and failure
+recovery remain consistent when the same policy is transferred to hardware.
+
+Working with Unitree G1/H2 platforms and Inspire hands also taught me that sim-to-real transfer is
+an experimental discipline rather than a single domain-randomization setting. On Jetson Orin NX,
+onboard perception and control must operate within concrete compute, latency, and integration
+constraints. A discrepancy that appears minor in a training log can become a timing mismatch,
+an unstable contact transition, or a systematic action error on the physical robot. My response
+has been to trace the complete observation-to-action path, isolate where simulation and hardware
+assumptions diverge, and iterate across policy representation, interfaces, and deployment tests.
+I do not view this hardware work as separate from research novelty. It exposes failure modes that
+can motivate better state representations, training distributions, safety mechanisms, and
+evaluation protocols. It also prepares me to contribute to a laboratory from the first experiment:
+I understand the difference between a policy that merely runs and one whose behavior can be
+systematically explained.
+
+[% if school.track_type == "CS" %]
+Within a Computer Science track, I want to emphasize large-scale reinforcement learning,
+representation learning, and visuomotor policies for general-purpose embodied behavior. A central
+question is how to learn state and action representations that preserve task-relevant visual and
+contact information while transferring across camera viewpoints, objects, scenes, and robot
+embodiments. I am interested in pretraining behavioral representations from heterogeneous motion,
+simulation, and robot trajectories, then adapting them efficiently to new loco-manipulation tasks.
+My data-systems preparation is directly relevant to building reproducible training pipelines and
+diagnosing distribution shift, while my deployment experience gives me a concrete standard for
+whether a supposedly general representation captures something physically useful. I also want to
+study evaluation beyond aggregate success: policies should be compared across visual variation,
+contact regimes, latency conditions, and recovery behavior so that progress toward robot foundation
+models is measurable rather than rhetorical.
+[% elif school.track_type == "ME" %]
+Within a Mechanical Engineering track, I want to place whole-body dynamics, contact-aware control,
+and experimentally validated model learning at the center of my research. Large-scale learning can
+produce expressive behaviors, but humanoid loco-manipulation still depends on force interaction,
+stability, actuator limits, and the mechanics of hands and bodies. I am interested in combining
+optimization or model-based structure with learned residual dynamics and adaptive policies, so that
+data improves performance without discarding physical interpretation. My experience with humanoid
+and dexterous-hand deployment would allow me to test these ideas through controlled comparisons of
+contact transitions, disturbances, and changes in load. I would approach sim-to-real transfer as a
+way to identify and reduce modeling error, connecting simulation fidelity, system identification,
+control design, and repeatable mechanical experiments.
+[% else %]
+Within a robotics-centered track, I want to integrate whole-body dynamics, contact-rich control,
+perception, and hardware deployment with scalable learning. Humanoid loco-manipulation offers an
+ideal setting for this integration: locomotion cannot be separated from manipulation when both
+compete for balance, contact, and limited onboard computation. I hope to investigate policies that
+coordinate feet, arms, hands, and gaze while adapting to uncertainty in object properties and the
+surrounding environment. I am particularly interested in combining model-based constraints with
+learned representations, using motion retargeting to structure behavior without restricting the
+controller to a single embodiment. My end-to-end deployment background would help me design
+experiments in which algorithms, sensing, software timing, and robot mechanics are evaluated as a
+single coupled system.
+[% endif %]
+
+The research direction I hope to pursue in my Ph.D. is a hardware-grounded behavioral foundation
+model for humanoid loco-manipulation. Such a model should not simply absorb larger trajectory
+datasets; it should support purposeful adaptation, expose uncertainty, and preserve the physical
+structure needed for safe execution. I imagine a training framework in which motion retargeting
+and simulation provide diverse structured experience, real-robot trials identify systematic gaps,
+and targeted fine-tuning converts those gaps into new learning signals. Vision and proprioception
+should be learned jointly with action so that a policy can anticipate contact and recover when its
+expectations are violated. Equally important, I want to build evaluation suites that report
+generalization, robustness, recovery, and deployment cost alongside task success. This agenda
+connects my interests in reinforcement learning, sim-to-real transfer, visual perception, and
+robot foundation models while giving each component a testable role.
+
+[[ school.why_school | tex ]] [[ school.why_track | tex ]]
+
+[% for pi in target_pis[:2] %]
+I am particularly interested in Professor [[ pi.name | tex ]]'s research in
+[[ pi.recent_work_keywords[0] | tex ]] and [[ pi.recent_work_keywords[1] | tex ]]. I would bring
+a concrete experimental perspective to this connection: my closed-loop humanoid and dexterous-hand
+experience would allow me to test new representations and control methods under real contact,
+sensing, and computation constraints. The question I hope to pursue is how progress in
+[[ pi.recent_work_keywords[0] | tex ]] can support adaptable behavior whose generalization is
+demonstrated through repeatable physical interaction, not only through simulation benchmarks.
+
+[% endfor %]
+My long-term objective is to [[ profile.sop.career_goal | tex ]] I want my doctoral training to
+make me equally comfortable deriving a learning objective, examining a contact model, building a
+data pipeline, and diagnosing a failed hardware trial. [[ school.name | tex ]]'s
+[[ school.department | tex ]] program is compelling to me because it would challenge all of these
+capabilities rather than force me to choose between algorithms and physical systems. With my
+interdisciplinary preparation and hands-on humanoid experience, I am ready to contribute sustained
+experimental work, collaborative engineering, and a research agenda aimed at capable and reliable
+robots in the real world.
+
+\end{document}

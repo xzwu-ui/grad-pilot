@@ -1,0 +1,131 @@
+# Public-safe template. Copy to profile.private.yaml for real personal details.
+applicant:
+  name: "Your Name"
+  name_zh: "你的姓名"
+  email: "your.email@example.com"
+  undergraduate_institution: "Dalian University of Technology"
+  undergraduate_institution_zh: "大连理工大学"
+  major: "Big Data Management and Applications"
+  major_zh: "大数据管理与应用"
+  gpa: 3.4
+  gpa_scale: 4.0
+  research_years: null
+  publication_count: null
+  research_keywords:
+    - "humanoid loco-manipulation"
+    - "motion retargeting"
+    - "reinforcement learning"
+    - "sim-to-real"
+    - "visuomotor policies"
+    - "robot foundation models"
+  degree_goal: "Direct Ph.D."
+  target_term: "2028 Fall"
+  citizenship_note: "International applicant; confirm each program's funding and English-test policy."
+
+links:
+  homepage: "https://yourname.github.io/"
+  github: "https://github.com/yourname"
+  paper_pdf: "https://yourname.github.io/assets/research.pdf"
+  demo_youtube: "https://www.youtube.com/watch?v=replace-with-demo-id"
+  demo_bilibili: "https://www.bilibili.com/video/replace-with-demo-id/"
+  linkedin: ""
+
+positioning:
+  headline: "Humanoid whole-body loco-manipulation, sim-to-real reinforcement learning, and robot foundation models"
+  pivot_summary: >-
+    Training in Big Data Management and Applications is presented as preparation in
+    mathematical modeling, probability and statistical decision-making, optimization,
+    large-scale data pipelines, and Markov decision processes. These foundations support
+    simulation-at-scale reinforcement learning and data-driven behavioral foundation models.
+  hardware_moat: >-
+    Closed-loop deployment on Unitree G1/H2 humanoids and Inspire dexterous hands,
+    including onboard perception and control on Jetson Orin NX, policy export with ONNX
+    Runtime, and iterative sim-to-real diagnosis on physical systems.
+  research_agenda: >-
+    Build generalizable humanoid loco-manipulation policies that combine scalable
+    reinforcement learning, visuomotor representations, motion retargeting, and
+    hardware-grounded evaluation.
+
+core_courses:
+  - {name: "Calculus / Advanced Mathematics", area: "mathematics", status: "confirm_against_transcript"}
+  - {name: "Linear Algebra", area: "mathematics", status: "confirm_against_transcript"}
+  - {name: "Probability and Statistics", area: "decision_theory", status: "confirm_against_transcript"}
+  - {name: "Operations Research and Optimization", area: "optimization", status: "confirm_against_transcript"}
+  - {name: "Data Structures and Algorithms", area: "computing", status: "confirm_against_transcript"}
+  - {name: "Database Systems and Big Data Engineering", area: "data_systems", status: "confirm_against_transcript"}
+  - {name: "Machine Learning", area: "learning", status: "confirm_against_transcript"}
+  - {name: "Stochastic Processes / Markov Decision Processes", area: "decision_theory", status: "confirm_before_claiming"}
+
+technical_stack:
+  simulation: ["Isaac Lab", "mjlab", "MuJoCo"]
+  learning: ["PyTorch", "Reinforcement Learning", "Imitation Learning", "ONNX Runtime"]
+  robotics: ["ROS 2", "Whole-Body Control", "Motion Retargeting", "Sim-to-Real Transfer"]
+  hardware: ["Unitree G1", "Unitree H2", "Inspire Dexterous Hand", "Jetson Orin NX"]
+  perception: ["Vision Perception", "Visuomotor Policies", "Onboard Perception"]
+
+representative_works:
+  - id: "humanoid-loco-manipulation"
+    title: "Whole-Body Loco-Manipulation on Unitree Humanoids"
+    role: "Specify your exact role and team size before external use"
+    summary: >-
+      Developed and deployed reinforcement-learning controllers for whole-body
+      dexterous loco-manipulation, connecting large-scale simulation training with
+      onboard perception, real-time control, and physical-robot evaluation.
+    methods: ["Isaac Lab", "MuJoCo", "PyTorch", "ROS 2", "ONNX Runtime"]
+    platforms: ["Unitree G1", "Unitree H2", "Inspire Dexterous Hand", "Jetson Orin NX"]
+    evidence:
+      paper_pdf: "https://yourname.github.io/assets/research.pdf"
+      demo_video: "https://www.youtube.com/watch?v=replace-with-demo-id"
+      code: "https://github.com/yourname"
+    verified_metrics: "Add only measured results that can be reproduced and explained."
+
+recommenders:
+  - id: "dut-advisor"
+    name: "DUT Advisor"
+    display_name: "DUT 导师"
+    institution: "Dalian University of Technology"
+    email: "dut.advisor@example.com"
+    relationship: "Research advisor; can evaluate research independence and technical depth"
+    priority: 1
+  - id: "ucb-mentor"
+    name: "UCB Mentor"
+    display_name: "UCB 导师"
+    institution: "UC Berkeley"
+    email: "ucb.mentor@example.com"
+    relationship: "External research mentor; include only if a genuine collaboration exists"
+    priority: 2
+  - id: "collab-c"
+    name: "Collaborator C"
+    display_name: "合作导师 C"
+    institution: "Collaborating Institution"
+    email: "collaborator.c@example.com"
+    relationship: "Research collaborator; can evaluate humanoid deployment work"
+    priority: 3
+  - id: "course-d"
+    name: "Course Instructor D"
+    display_name: "课程导师 D"
+    institution: "Dalian University of Technology"
+    email: "course.d@example.com"
+    relationship: "Course instructor; best used for analytical or advanced technical coursework"
+    priority: 4
+
+email:
+  follow_up_after_days: 12
+  signature: |-
+    Best regards,
+    Your Name
+    Undergraduate, Big Data Management and Applications
+    Dalian University of Technology
+    Prospective Direct Ph.D. Applicant, 2028 Fall
+    Homepage: https://yourname.github.io/
+
+sop:
+  target_words: 1000
+  career_goal: >-
+    lead a research group that develops reliable, general-purpose humanoid robots through
+    tightly integrated learning, dynamics, perception, and real-world experimentation.
+  claims_requiring_evidence:
+    - "Exact publication, preprint, patent, award, and authorship status"
+    - "Control frequency, success rates, sim-to-real gaps, and benchmark improvements"
+    - "Individual contribution in collaborative robot deployments"
+    - "Course titles, grades, rankings, and English-test scores"

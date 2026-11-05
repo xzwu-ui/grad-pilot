@@ -1,0 +1,56 @@
+{
+  "messages": [
+    {
+      "id": "demo-berkeley-admit",
+      "threadId": "demo-thread-1",
+      "snippet": "We are pleased to offer you admission to UC Berkeley.",
+      "text": "Dear Applicant,\n\nWe are pleased to offer you admission to UC Berkeley for the Ph.D. program.\nApplication ID: DEMO-UCB-2028-001\nSubmission Date: December 1, 2027\n\nGraduate Admissions",
+      "payload": {
+        "headers": [
+          {"name": "Subject", "value": "UC Berkeley PhD admission offer"},
+          {"name": "From", "value": "Graduate Admissions <admissions@example.edu>"},
+          {"name": "Date", "value": "Wed, 1 Mar 2028 09:00:00 -0800"}
+        ]
+      }
+    },
+    {
+      "id": "demo-mit-interview",
+      "threadId": "demo-thread-2",
+      "snippet": "MIT interview invitation for February 10, 2028.",
+      "text": "You are invited to an interview at MIT.\nYour interview is scheduled for February 10, 2028.\nReference ID: DEMO-MIT-2028-002",
+      "payload": {
+        "headers": [
+          {"name": "Subject", "value": "MIT PhD interview invitation"},
+          {"name": "From", "value": "Doctoral Program <doctoral@example.edu>"},
+          {"name": "Date", "value": "Mon, 15 Jan 2028 10:30:00 -0500"}
+        ]
+      }
+    },
+    {
+      "id": "demo-stanford-reject",
+      "threadId": "demo-thread-3",
+      "snippet": "We regret to inform you that your application was unsuccessful.",
+      "text": "Thank you for submitting your application to Stanford University. We regret to inform you that your application was unsuccessful.\nApplication ID: DEMO-STANFORD-2028-003",
+      "payload": {
+        "headers": [
+          {"name": "Subject", "value": "Stanford University application decision"},
+          {"name": "From", "value": "Graduate Admissions <grad-admissions@example.edu>"},
+          {"name": "Date", "value": "Fri, 17 Mar 2028 16:00:00 -0700"}
+        ]
+      }
+    },
+    {
+      "id": "demo-unmatched-newsletter",
+      "threadId": "demo-thread-4",
+      "snippet": "A general newsletter with no application status.",
+      "text": "This is a general graduate school newsletter. No application update is included.",
+      "payload": {
+        "headers": [
+          {"name": "Subject", "value": "Graduate school newsletter"},
+          {"name": "From", "value": "Newsletter <news@example.edu>"},
+          {"name": "Date", "value": "Thu, 4 Jan 2028 12:00:00 +0000"}
+        ]
+      }
+    }
+  ]
+}
