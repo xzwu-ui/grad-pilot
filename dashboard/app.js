@@ -26,6 +26,7 @@
   const CHECKLIST_LABELS = { not_started: "未开始", in_progress: "进行中", ready: "已就绪", submitted: "已提交", not_required: "不适用" };
   const ESSAY_LABELS = { draft: "草稿", in_review: "审阅中", final: "已定稿", submitted: "已提交", archived: "已归档" };
   const ADMISSIONS_LABELS = { unknown: "招生未知", expected_open: "预期开放", accepting: "确认招生", not_accepting: "不招生" };
+  const VISA_STATUS_LABELS = { not_started: "未开始", preparing: "准备材料中", applied: "已递交", approved: "已获签", not_required: "不需要签证" };
   const VIEW_META = {
     overview: ["MISSION CONTROL / 01", "申请任务总览"],
     season: ["APPLICATION SEASON / 02", "全局申请季"],
@@ -36,7 +37,9 @@
     lor: ["LETTER OPERATIONS / 07", "推荐人分配矩阵"],
     outreach: ["ACADEMIC OUTREACH / 08", "PI 雷达与套磁 Follow-up"],
     budget: ["SEMI-DIY FINANCE / 09", "申请预算控制台"],
-    assets: ["PRE-FLIGHT CHECK / 10", "学术资产与工作区设置"]
+    visa: ["VISA & POLICY / 10", "签证与入境政策调研"],
+    campus: ["CAMPUS LIFE / 11", "校园生活、成本与安全"],
+    assets: ["PRE-FLIGHT CHECK / 12", "学术资产与工作区设置"]
   };
 
   const ui = {
@@ -90,6 +93,7 @@
       tasks: [],
       essays: [],
       gmail_imports: [],
+      visa_records: [],
       budget_items: [
         { id: "toefl", label: "TOEFL iBT 考试", amount_usd: 260, enabled: true, category: "testing" },
         { id: "transcripts", label: "成绩单、寄送与翻译预留", amount_usd: 120, enabled: true, category: "documents" },
@@ -116,6 +120,7 @@
     data.tasks = Array.isArray(data.tasks) ? data.tasks : [];
     data.essays = Array.isArray(data.essays) ? data.essays : [];
     data.gmail_imports = Array.isArray(data.gmail_imports) ? data.gmail_imports : [];
+    data.visa_records = Array.isArray(data.visa_records) ? data.visa_records : [];
     data.budget_items = Array.isArray(data.budget_items) ? data.budget_items : [];
     data.settings = Object.assign({ currency: "USD", cny_per_usd: 7.2, follow_up_after_days: 12, deadline_warning_days: 30, chart_textures: false, pinned_items: [] }, data.settings || {});
     data.settings.pinned_items = Array.isArray(data.settings.pinned_items) ? data.settings.pinned_items : [];
@@ -139,6 +144,13 @@
       school.funding.types = Array.isArray(school.funding.types) ? school.funding.types : [];
       school.application_policy = Object.assign({ supervisor_contact: "unknown", interview: "unknown", source_url: "", verified: false, last_verified: null }, school.application_policy || {});
       school.decision = Object.assign({ close_reason: null, decision_date: null, response_deadline: null, notes: "" }, school.decision || {});
+      school.visa = Object.assign({ status: "not_started", notes: "", source_url: "", verified: false, last_verified: null }, school.visa || {});
+      school.campus = Object.assign({ environment_notes: "", environment_rating: null, living_cost_monthly_usd: 0, housing_notes: "", safety_notes: "", safety_rating: null, source_url: "", verified: false, last_verified: null }, school.campus || {});
+      school.campus.living_cost_monthly_usd = Math.max(0, Number(school.campus.living_cost_monthly_usd) || 0);
+      for (const field of ["environment_rating", "safety_rating"]) {
+        const rating = Number(school.campus[field]);
+        school.campus[field] = Number.isInteger(rating) && rating >= 1 && rating <= 5 ? rating : null;
+      }
       school.application_id = school.application_id || "";
       school.submission_date = school.submission_date || null;
       school.interview_date = school.interview_date || null;
@@ -171,7 +183,7 @@
     for (const key of ["schools", "recommenders", "assets", "budget_items"]) {
       if (!Array.isArray(data[key])) throw new Error(`缺少数组字段：${key}`);
     }
-    for (const key of ["documents", "tasks", "essays", "gmail_imports"]) {
+    for (const key of ["documents", "tasks", "essays", "gmail_imports", "visa_records"]) {
       if (data[key] !== undefined && !Array.isArray(data[key])) throw new Error(`字段必须是数组：${key}`);
     }
     if (!data.cycle || !data.applicant || !data.settings) throw new Error("缺少 cycle、applicant 或 settings。");
@@ -201,6 +213,15 @@
         throw new Error(`学校 ${school.id} 的申请政策无效。`);
       }
       if (school.decision?.close_reason && !Object.hasOwn(CLOSE_REASON_LABELS, school.decision.close_reason)) throw new Error(`学校 ${school.id} 的关闭原因无效。`);
+      if (school.visa && !Object.hasOwn(VISA_STATUS_LABELS, school.visa.status || "not_started")) throw new Error(`学校 ${school.id} 的签证状态无效。`);
+      if (school.campus) {
+        for (const field of ["environment_rating", "safety_rating"]) {
+          const rating = school.campus[field];
+          if (rating !== null && rating !== undefined && !(Number.isInteger(rating) && rating >= 1 && rating <= 5)) throw new Error(`学校 ${school.id} 的 ${field} 必须是 1–5 的整数或空。`);
+        }
+        const cost = school.campus.living_cost_monthly_usd;
+        if (cost !== undefined && cost !== null && !(Number.isFinite(Number(cost)) && Number(cost) >= 0)) throw new Error(`学校 ${school.id} 的月生活成本必须是 ≥ 0 的数字。`);
+      }
       for (const pi of school.target_pis) {
         if (pi.shortlisted !== undefined && typeof pi.shortlisted !== "boolean") throw new Error(`${pi.id} 的 Shortlist 状态必须是布尔值。`);
         if (pi.shortlisted_on && !/^\d{4}-\d{2}-\d{2}$/.test(pi.shortlisted_on)) throw new Error(`${pi.id} 的 Shortlist 日期无效。`);
@@ -216,6 +237,16 @@
     }
     for (const item of data.gmail_imports || []) {
       if (!item || typeof item !== "object" || !item.gmail_message_id || !schoolIds.has(item.school_id)) throw new Error("Gmail 导入记录引用了未知学校或缺少邮件 ID。");
+    }
+    const visaIds = new Set();
+    for (const record of data.visa_records || []) {
+      if (!record || typeof record !== "object" || !/^[a-z0-9][a-z0-9-]*$/.test(record.id || "")) throw new Error(`签证记录 ID 无效：${record?.id || "(空)"}`);
+      if (visaIds.has(record.id)) throw new Error(`签证记录 ID 重复：${record.id}`);
+      visaIds.add(record.id);
+      if (!record.country || !record.visa_type) throw new Error(`签证记录 ${record.id} 缺少国家或签证类型。`);
+      if (!Object.hasOwn(VISA_STATUS_LABELS, record.status || "not_started")) throw new Error(`签证记录 ${record.id} 的状态无效。`);
+      const fee = record.application_fee_usd;
+      if (fee !== undefined && fee !== null && !(Number.isFinite(Number(fee)) && Number(fee) >= 0)) throw new Error(`签证记录 ${record.id} 的费用必须是 ≥ 0 的数字。`);
     }
     const recommenderIds = new Set();
     for (const person of data.recommenders) {
@@ -1060,6 +1091,84 @@
     return `<div class="budget-hero"><section class="budget-total"><span class="hero-kicker">ESTIMATED APPLICATION PORTFOLIO</span><div class="amount">${money(totals.total)}</div><div class="budget-cny">约 ¥${totals.cny.toLocaleString("zh-CN", { maximumFractionDigits: 0 })} CNY</div><div class="budget-breakdown"><div><strong>${money(totals.schoolTotal)}</strong><span>学校相关费用</span></div><div><strong>${money(totals.fixedTotal)}</strong><span>考试 / 材料 / 半 DIY 服务</span></div></div></section><section class="budget-controls"><span class="eyebrow">PLANNING ASSUMPTIONS</span><h2>预算口径</h2><p class="subline">统计所有非 Closed 项目；Fee waiver 只免除申请费，不免除送分及其他费用。金额均为规划值，请以支付页面为准。</p><label>规划汇率（CNY / USD）<input type="number" min="0.01" step="0.01" value="${esc(state.settings.cny_per_usd)}" data-action="settings-field" data-field="cny_per_usd"></label><p class="subline" style="margin-top:12px">半 DIY 服务默认金额为 0 且未启用。若使用润色、咨询或材料服务，请修改对应条目，不涉及任何云端支付。</p></section></div><div class="dashboard-grid"><section class="panel"><div class="panel-head"><div><h2>固定与可选支出</h2><p>勾选纳入预算，可添加自己的半 DIY 项目。</p></div><span class="panel-code">FIXED COSTS</span></div>${fixedRows}<form id="add-budget-form" class="add-budget-form"><input name="label" required placeholder="新支出名称" aria-label="新支出名称"><input name="amount" type="number" min="0" step="0.01" value="0" required aria-label="金额"><select name="category" aria-label="类别"><option value="testing">testing</option><option value="documents">documents</option><option value="services">services</option><option value="other">other</option></select><button class="button button-small button-ghost" type="submit">+ 添加</button></form></section><section class="panel"><div class="panel-head"><div><h2>学校费用 / Tier</h2><p>单一蓝色编码金额，不代表学校层级。</p></div><span class="panel-code">FIG. 03</span></div>${horizontalBarChart("budget-chart", "各层级学校费用", tierRows, () => "var(--series-1)", money)}</section></div><div class="table-wrap"><table><thead><tr><th>学校</th><th class="numeric">申请费 USD</th><th class="numeric">送分 USD</th><th class="numeric">其他 USD</th><th>Fee waiver</th><th class="numeric">小计</th></tr></thead><tbody>${schoolRows}</tbody></table></div>`;
   }
 
+  function visaRecordForSchool(school) {
+    const needle = String(school.country || "").trim().toLowerCase();
+    if (!needle) return null;
+    return state.visa_records.find((record) => String(record.country || "").trim().toLowerCase() === needle) || null;
+  }
+
+  function visaStatusSelect(action, id, current) {
+    return `<select class="inline-input" data-action="${action}" data-id="${esc(id)}">${Object.entries(VISA_STATUS_LABELS).map(([value, label]) => `<option value="${value}" ${current === value ? "selected" : ""}>${label}</option>`).join("")}</select>`;
+  }
+
+  function ratingDots(rating, label) {
+    if (!Number.isInteger(Number(rating)) || Number(rating) < 1) return '<span class="subline">未评价</span>';
+    const value = Number(rating);
+    return `<span class="fit-score" aria-label="${esc(label)} ${value}/5">${"◆".repeat(value)}${"◇".repeat(5 - value)}</span>`;
+  }
+
+  function renderVisa() {
+    const records = state.visa_records;
+    const approved = records.filter((record) => record.status === "approved").length;
+    const unverified = records.filter((record) => !record.verified).length;
+    const schoolsPrepared = state.schools.filter((school) => school.visa.status !== "not_started").length;
+    const cards = records.map((record) => {
+      const source = safeUrl(record.source_url);
+      return `<article class="panel visa-record-card">
+        <div class="panel-head"><div><h3>${esc(record.country)} · ${esc(record.visa_type)}</h3><p>${record.verified ? `✓ 已按官方来源核验 ${esc(record.last_verified || "")}` : "◇ 政策调研待核验"}${source ? ` · <a href="${esc(source)}" target="_blank" rel="noopener noreferrer">官方来源 ↗</a>` : ""}</p></div>
+        <div class="detail-actions"><button class="icon-button" data-action="edit-visa" data-id="${esc(record.id)}" aria-label="编辑 ${esc(record.country)} 签证记录">✎</button><button class="icon-button" data-action="delete-visa" data-id="${esc(record.id)}" aria-label="删除 ${esc(record.country)} 签证记录">×</button></div></div>
+        <div class="visa-record-fields">
+          <label class="inline-field"><span>整体状态</span>${visaStatusSelect("visa-status", record.id, record.status)}</label>
+          <label class="inline-field"><span>官方费用 USD</span><input type="number" class="inline-input" min="0" step="0.01" value="${Number(record.application_fee_usd) || 0}" data-action="visa-fee" data-id="${esc(record.id)}" aria-label="${esc(record.country)} 签证官方费用"></label>
+          <label class="check-label"><input type="checkbox" data-action="visa-verified" data-id="${esc(record.id)}" ${record.verified ? "checked" : ""}> 已人工核验</label>
+        </div>
+        ${record.timeline_notes ? `<p><strong>流程时间线</strong><span class="subline">${esc(record.timeline_notes)}</span></p>` : ""}
+        ${record.policy_notes ? `<p><strong>政策观察</strong><span class="subline">${esc(record.policy_notes)}</span></p>` : ""}
+        ${record.documents_notes ? `<p><strong>材料清单</strong><span class="subline">${esc(record.documents_notes)}</span></p>` : ""}
+        ${record.notes ? `<p class="subline">${esc(record.notes)}</p>` : ""}
+      </article>`;
+    }).join("");
+    const rows = [...state.schools].sort((a, b) => a.name.localeCompare(b.name)).map((school) => {
+      const record = visaRecordForSchool(school);
+      const officeUrl = safeUrl(school.visa.source_url);
+      return `<tr><td><span class="school-name">${esc(school.name)}</span><span class="subline">${esc(school.country)} · ${esc(school.status)}</span></td>
+        <td>${record ? `<span class="tag tag-match">${esc(record.visa_type)}</span>` : '<span class="subline status-warning">无匹配国家记录</span>'}</td>
+        <td>${visaStatusSelect("school-visa-status", school.id, school.visa.status)}</td>
+        <td><input type="text" class="inline-input" value="${esc(school.visa.notes)}" data-action="school-visa-field" data-field="notes" data-id="${esc(school.id)}" placeholder="I-20 / 签证标签进度等" aria-label="${esc(school.name)} 签证行政笔记"></td>
+        <td><input type="url" class="inline-input" value="${esc(school.visa.source_url)}" data-action="school-visa-field" data-field="source_url" data-id="${esc(school.id)}" placeholder="国际学生办公室页面" aria-label="${esc(school.name)} 签证官方页面">${officeUrl ? `<a href="${esc(officeUrl)}" target="_blank" rel="noopener noreferrer">↗</a>` : ""}</td></tr>`;
+    }).join("");
+    return `<div class="panel" style="margin-bottom:18px;border-left:3px solid var(--warning)"><h2>政策调研，不是法律或移民建议</h2><p class="subline" style="margin-bottom:0">签证与入境政策随时可能变化，且因个人情况而异。本页只保存你自己的调研记录、来源链接与核验状态；行动前一切以使领馆、移民局与学校国际学生办公室的官方通知为准。</p></div>
+      <div class="outreach-summary"><div><span class="kpi-label">国家 / 地区记录</span><strong>${records.length}</strong></div><div><span class="kpi-label">已获签</span><strong>${approved}</strong></div><div><span class="kpi-label">待人工核验</span><strong class="${unverified ? "status-warning" : ""}">${unverified}</strong></div><div><span class="kpi-label">已启动行前准备的学校</span><strong>${schoolsPrepared}/${state.schools.length}</strong></div></div>
+      <div class="panel-head"><div><h2>按国家 / 地区的签证与政策记录</h2><p>每个国家一条记录：流程时间线、政策观察、材料清单与官方来源；状态与费用可在此直接修改。</p></div><button class="button button-primary" data-action="add-visa">+ 添加国家记录</button></div>
+      ${cards ? `<div class="visa-record-grid">${cards}</div>` : '<div class="note-box">尚无签证记录。点击右上角按国家添加，先覆盖你实际会入读的国家。</div>'}
+      <div class="panel-head"><div><h2>逐校签证进度</h2><p>学校按国家自动匹配签证记录；这里记录每所学校自己的行政进度（如 I-20 签发、签证标签寄送）。</p></div><span class="panel-code">BY SCHOOL</span></div>
+      ${state.schools.length ? `<div class="table-wrap"><table><thead><tr><th>学校</th><th>匹配签证类型</th><th>该校进度</th><th>行政笔记</th><th>学校官方页面</th></tr></thead><tbody>${rows}</tbody></table></div>` : '<div class="note-box">尚无学校；先在选校与清单中添加项目。</div>'}`;
+  }
+
+  function renderCampus() {
+    const schools = [...state.schools].sort((a, b) => (Number(b.campus.living_cost_monthly_usd) || 0) - (Number(a.campus.living_cost_monthly_usd) || 0));
+    const recorded = schools.filter((school) => Number(school.campus.living_cost_monthly_usd) > 0);
+    const average = recorded.length ? Math.round(recorded.reduce((sum, school) => sum + Number(school.campus.living_cost_monthly_usd), 0) / recorded.length) : 0;
+    const verified = schools.filter((school) => school.campus.verified).length;
+    const costRows = schools.slice(0, 12).map((school) => ({ label: school.name, value: Number(school.campus.living_cost_monthly_usd) || 0 }));
+    const rows = schools.map((school) => {
+      const campus = school.campus;
+      const source = safeUrl(campus.source_url);
+      return `<tr><td><span class="school-name">${esc(school.name)}</span><span class="subline">${esc(school.country)} · ${esc(school.department_track)}</span></td>
+        <td><span class="subline">${esc(campus.environment_notes || "待调研")}</span>${ratingDots(campus.environment_rating, "环境评价")}</td>
+        <td><input type="number" class="inline-input numeric" min="0" step="10" value="${Number(campus.living_cost_monthly_usd) || 0}" data-action="campus-cost" data-id="${esc(school.id)}" aria-label="${esc(school.name)} 预估月生活成本"></td>
+        <td><span class="subline">${esc(campus.housing_notes || "待调研")}</span></td>
+        <td>${ratingDots(campus.safety_rating, "安全评价")}<span class="subline">${esc(campus.safety_notes || "待调研")}</span></td>
+        <td>${campus.verified ? `<span class="status-good subline">✓ 已核验 ${esc(campus.last_verified || "")}</span>` : '<span class="subline status-warning">◇ 待核验</span>'}${source ? `<a href="${esc(source)}" target="_blank" rel="noopener noreferrer">来源 ↗</a>` : ""}</td>
+        <td><div class="table-actions"><button class="button button-small button-ghost" data-action="edit-campus" data-id="${esc(school.id)}">编辑调研</button></div></td></tr>`;
+    }).join("");
+    return `<div class="panel" style="margin-bottom:18px;border-left:3px solid var(--warning)"><h2>个人调研，不是官方统计</h2><p class="subline" style="margin-bottom:0">生活成本与安全评价是你的个人规划记录：金额为规划估计，安全结论请基于 Clery 年报、校方安全通报等一手来源，并在访问学校时实地核实。未核验条目不会显示 ✓。</p></div>
+      <div class="outreach-summary"><div><span class="kpi-label">已记录成本学校</span><strong>${recorded.length}/${schools.length}</strong></div><div><span class="kpi-label">平均月成本</span><strong>${money(average)}</strong></div><div><span class="kpi-label">成本区间</span><strong>${recorded.length ? `${money(Math.min(...recorded.map((school) => Number(school.campus.living_cost_monthly_usd))))} – ${money(Math.max(...recorded.map((school) => Number(school.campus.living_cost_monthly_usd))))}` : "—"}</strong></div><div><span class="kpi-label">已核验调研</span><strong class="${verified < schools.length ? "status-warning" : ""}">${verified}/${schools.length}</strong></div></div>
+      <div class="dashboard-grid"><section class="panel"><div class="panel-head"><div><h2>月生活成本对比（Top 12）</h2><p>单一蓝色编码金额，只表示你自己记录的规划值；完整数据见随附数据表。</p></div><span class="panel-code">FIG. 04</span></div>${horizontalBarChart("campus-chart", "各校预估月生活成本", costRows, () => "var(--series-1)", money)}</section></div>
+      <div class="panel-head"><div><h2>校园环境 · 成本 · 住宿 · 安全对比</h2><p>月成本可直接在此修改；环境和安全笔记、评分与来源在「编辑调研」中维护。</p></div><span class="panel-code">COMPARISON</span></div>
+      ${schools.length ? `<div class="table-wrap"><table><thead><tr><th>学校</th><th>环境</th><th class="numeric">月成本 USD</th><th>住宿</th><th>安全</th><th>核验</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table></div>` : '<div class="note-box">尚无学校；先在选校与清单中添加项目。</div>'}`;
+  }
+
   function renderAssets() {
     const cards = state.assets.map((asset) => {
       const url = safeUrl(asset.url);
@@ -1111,7 +1220,7 @@
       panel.classList.toggle("active", selected);
     });
     renderGlobalNotice();
-    const renderers = { overview: renderOverview, season: renderSeason, tasks: renderTasks, applications: renderApplications, materials: renderMaterials, essays: renderEssays, lor: renderLor, outreach: renderOutreach, budget: renderBudget, assets: renderAssets };
+    const renderers = { overview: renderOverview, season: renderSeason, tasks: renderTasks, applications: renderApplications, materials: renderMaterials, essays: renderEssays, lor: renderLor, outreach: renderOutreach, budget: renderBudget, visa: renderVisa, campus: renderCampus, assets: renderAssets };
     document.getElementById(`view-${ui.view}`).innerHTML = renderers[ui.view]();
     if (focusKey) {
       const replacement = document.querySelector(`[data-focus-key="${CSS.escape(focusKey)}"]`);
@@ -1228,6 +1337,48 @@
       render();
     }
     openDialog("pi-dialog");
+  }
+
+  function openVisa(id = "") {
+    const record = id ? state.visa_records.find((entry) => entry.id === id) : null;
+    const form = document.getElementById("visa-form");
+    form.reset();
+    document.getElementById("visa-dialog-title").textContent = record ? `编辑 ${record.country} 签证记录` : "添加国家 / 地区签证记录";
+    form.elements.original_id.value = id;
+    form.elements.id.readOnly = Boolean(record);
+    form.elements.country.value = record?.country || "";
+    form.elements.id.value = record?.id || "";
+    form.elements.visa_type.value = record?.visa_type || "";
+    form.elements.status.value = record?.status || "not_started";
+    form.elements.application_fee_usd.value = Number(record?.application_fee_usd) || 0;
+    form.elements.timeline_notes.value = record?.timeline_notes || "";
+    form.elements.policy_notes.value = record?.policy_notes || "";
+    form.elements.documents_notes.value = record?.documents_notes || "";
+    form.elements.source_url.value = record?.source_url || "";
+    form.elements.verified.checked = Boolean(record?.verified);
+    form.elements.last_verified.value = record?.last_verified || "";
+    form.elements.notes.value = record?.notes || "";
+    openDialog("visa-dialog");
+  }
+
+  function openCampus(schoolId) {
+    const school = schoolById(schoolId);
+    if (!school) return;
+    const campus = school.campus || {};
+    const form = document.getElementById("campus-form");
+    form.reset();
+    document.getElementById("campus-dialog-title").textContent = `${school.name} · 校园与生活调研`;
+    form.elements.school_id.value = schoolId;
+    form.elements.environment_notes.value = campus.environment_notes || "";
+    form.elements.environment_rating.value = Number.isInteger(campus.environment_rating) ? campus.environment_rating : "";
+    form.elements.living_cost_monthly_usd.value = Number(campus.living_cost_monthly_usd) || 0;
+    form.elements.housing_notes.value = campus.housing_notes || "";
+    form.elements.safety_rating.value = Number.isInteger(campus.safety_rating) ? campus.safety_rating : "";
+    form.elements.safety_notes.value = campus.safety_notes || "";
+    form.elements.source_url.value = campus.source_url || "";
+    form.elements.verified.checked = Boolean(campus.verified);
+    form.elements.last_verified.value = campus.last_verified || "";
+    openDialog("campus-dialog");
   }
 
   function openRecommender(id = "") {
@@ -1788,6 +1939,17 @@
       }
       return undefined;
     }
+    if (action === "add-visa") return openVisa();
+    if (action === "edit-visa") return openVisa(id);
+    if (action === "edit-campus") return openCampus(id);
+    if (action === "delete-visa") {
+      const record = state.visa_records.find((entry) => entry.id === id);
+      if (record && window.confirm(`删除 ${record.country} 的签证记录？逐校签证进度会保留，但不再匹配到该国家记录。`)) {
+        state.visa_records = state.visa_records.filter((entry) => entry.id !== id);
+        return commit("签证记录已删除。 ");
+      }
+      return undefined;
+    }
     if (action === "toggle-textures") {
       state.settings.chart_textures = !state.settings.chart_textures;
       return commit(`图表纹理辅助已${state.settings.chart_textures ? "开启" : "关闭"}。`);
@@ -1928,6 +2090,43 @@
       }
       state.settings[element.dataset.field] = numeric;
       return commit("工作区设置已更新。 ");
+    }
+    if (action === "visa-status") {
+      const record = state.visa_records.find((entry) => entry.id === id);
+      if (!record) return undefined;
+      record.status = element.value;
+      return commit("签证整体状态已更新。 ");
+    }
+    if (action === "visa-fee") {
+      const record = state.visa_records.find((entry) => entry.id === id);
+      if (!record) return undefined;
+      record.application_fee_usd = Math.max(0, Number(element.value) || 0);
+      return commit("签证官方费用已更新。 ");
+    }
+    if (action === "visa-verified") {
+      const record = state.visa_records.find((entry) => entry.id === id);
+      if (!record) return undefined;
+      record.verified = element.checked;
+      record.last_verified = element.checked ? record.last_verified || today() : null;
+      return commit(element.checked ? "已记录人工核验。" : "已取消核验标记。 ");
+    }
+    if (action === "school-visa-status") {
+      const school = schoolById(id);
+      if (!school) return undefined;
+      school.visa.status = element.value;
+      return commit("逐校签证进度已更新。 ");
+    }
+    if (action === "school-visa-field") {
+      const school = schoolById(id);
+      if (!school) return undefined;
+      school.visa[element.dataset.field] = element.value.trim();
+      return commit("逐校签证记录已更新。 ");
+    }
+    if (action === "campus-cost") {
+      const school = schoolById(id);
+      if (!school) return undefined;
+      school.campus.living_cost_monthly_usd = Math.max(0, Number(element.value) || 0);
+      return commit("月生活成本已更新。 ");
     }
     if (action === "toggle-textures") {
       state.settings.chart_textures = element.checked;
@@ -2209,6 +2408,50 @@
       commit(existing ? "交流记录已更新。 " : "交流记录已添加；可继续记录下一次联系。 ");
       resetInteractionForm(values.school_id, values.pi_id);
       renderInteractionHistory(pi);
+    } else if (form.getAttribute("id") === "visa-form") {
+      const values = Object.fromEntries(new FormData(form));
+      if (!values.original_id && state.visa_records.some((entry) => entry.id === values.id)) return toast(`签证记录 ID ${values.id} 已存在。`);
+      const existing = values.original_id ? state.visa_records.find((entry) => entry.id === values.original_id) : null;
+      const record = existing || {};
+      Object.assign(record, {
+        id: values.id,
+        country: values.country.trim(),
+        visa_type: values.visa_type.trim(),
+        status: values.status,
+        application_fee_usd: Math.max(0, Number(values.application_fee_usd) || 0),
+        timeline_notes: values.timeline_notes.trim(),
+        policy_notes: values.policy_notes.trim(),
+        documents_notes: values.documents_notes.trim(),
+        source_url: values.source_url.trim(),
+        verified: Boolean(values.verified),
+        last_verified: values.verified ? values.last_verified || today() : null,
+        notes: values.notes.trim()
+      });
+      if (!existing) state.visa_records.push(record);
+      closeDialog("visa-dialog");
+      commit(existing ? "签证记录已保存。 " : "签证记录已添加；请补充官方来源并人工核验。 ");
+    } else if (form.getAttribute("id") === "campus-form") {
+      const values = Object.fromEntries(new FormData(form));
+      const school = schoolById(values.school_id);
+      if (!school) return toast("目标学校不存在。 ");
+      const rating = (raw) => {
+        if (raw === "" || raw === null) return null;
+        const parsed = Number(raw);
+        return Number.isInteger(parsed) && parsed >= 1 && parsed <= 5 ? parsed : null;
+      };
+      school.campus = {
+        environment_notes: values.environment_notes.trim(),
+        environment_rating: rating(values.environment_rating),
+        living_cost_monthly_usd: Math.max(0, Number(values.living_cost_monthly_usd) || 0),
+        housing_notes: values.housing_notes.trim(),
+        safety_notes: values.safety_notes.trim(),
+        safety_rating: rating(values.safety_rating),
+        source_url: values.source_url.trim(),
+        verified: Boolean(values.verified),
+        last_verified: values.verified ? values.last_verified || today() : null
+      };
+      closeDialog("campus-dialog");
+      commit("校园与生活调研已保存。 ");
     } else if (form.getAttribute("id") === "add-budget-form") {
       const values = Object.fromEntries(new FormData(form));
       const idBase = slug(values.label, `budget-${Date.now()}`);

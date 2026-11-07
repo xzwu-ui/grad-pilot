@@ -105,6 +105,41 @@ class DataTests(GradPilotTestCase):
         details = deadline_details(school, now)
         self.assertEqual(details["days"], 8)
         self.assertIn("-08:00", school["deadline"])
+
+    def test_visa_and_campus_collections_validate(self):
+        countries = {school["country"] for school in self.data["schools"]}
+        self.assertEqual({record["country"] for record in self.data["visa_records"]}, countries)
+        for school in self.data["schools"]:
+            self.assertEqual(school["visa"]["status"], "not_started")
+            self.assertFalse(school["campus"]["verified"])
+            self.assertGreaterEqual(school["campus"]["living_cost_monthly_usd"], 0)
+
+    def test_visa_records_reject_duplicate_ids_and_invalid_status(self):
+        candidate = copy.deepcopy(self.data)
+        candidate["visa_records"].append(copy.deepcopy(candidate["visa_records"][0]))
+        with self.assertRaisesRegex(GradPilotError, "visa_records: duplicate ids"):
+            validate_database(candidate)
+
+        candidate = copy.deepcopy(self.data)
+        candidate["visa_records"][0]["status"] = "already_enrolled"
+        with self.assertRaisesRegex(GradPilotError, "visa_records.0.status"):
+            validate_database(candidate)
+
+    def test_school_visa_and_campus_field_limits(self):
+        candidate = copy.deepcopy(self.data)
+        candidate["schools"][0]["visa"]["status"] = "bogus"
+        with self.assertRaisesRegex(GradPilotError, "schools.0.visa"):
+            validate_database(candidate)
+
+        candidate = copy.deepcopy(self.data)
+        candidate["schools"][0]["campus"]["environment_rating"] = 9
+        with self.assertRaisesRegex(GradPilotError, "environment_rating"):
+            validate_database(candidate)
+
+        candidate = copy.deepcopy(self.data)
+        candidate["schools"][0]["campus"]["living_cost_monthly_usd"] = -1
+        with self.assertRaisesRegex(GradPilotError, "living_cost_monthly_usd"):
+            validate_database(candidate)
     def test_workspace_collections_validate_and_reject_unknown_references(self):
         candidate = copy.deepcopy(self.data)
         candidate["documents"] = [{

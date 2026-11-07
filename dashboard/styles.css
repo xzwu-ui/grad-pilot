@@ -322,6 +322,12 @@ tbody tr:hover > td { background: color-mix(in srgb, var(--surface-2) 50%, trans
 .add-budget-form { display: grid; grid-template-columns: minmax(180px, 1fr) 120px 140px auto; gap: 9px; margin-top: 18px; }
 
 .asset-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 20px; }
+.visa-record-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 20px; }
+.visa-record-fields { display: flex; flex-wrap: wrap; align-items: end; gap: 14px; margin-bottom: 4px; }
+.inline-field { display: grid; gap: 4px; min-width: 140px; color: var(--text-secondary); font-size: 11px; }
+.inline-field > span { color: var(--muted); font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.visa-record-card p { margin: 10px 0 0; }
+.visa-record-card p > strong { display: block; margin-bottom: 2px; color: var(--text-secondary); font-size: 12px; }
 .asset-card { padding: 19px; border: 1px solid var(--line); background: var(--surface-1); }
 .asset-card.verified { border-top: 2px solid var(--good); }
 .asset-card.unverified { border-top: 2px solid var(--warning); }
@@ -589,7 +595,7 @@ tbody tr:hover > td { background: color-mix(in srgb, var(--surface-2) 50%, trans
   .workspace-footer { flex-direction: column; }
 }
 @media (max-width: 900px) {
-  .material-grid, .essay-grid { grid-template-columns: 1fr; }
+  .material-grid, .essay-grid, .visa-record-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 680px) {
   .writing-metrics { grid-template-columns: repeat(2, 1fr); }

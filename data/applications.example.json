@@ -21,6 +21,50 @@
   "documents": [],
   "tasks": [],
   "essays": [],
+  "visa_records": [
+    {
+      "id": "us-f1",
+      "country": "United States",
+      "visa_type": "F-1 学生签证",
+      "status": "not_started",
+      "application_fee_usd": 0,
+      "timeline_notes": "接受 Offer → 学校国际学生办公室签发 I-20 → 缴纳 SEVIS I-901 费用 → 填写 DS-160 → 缴费并预约面签 → 面签（可能涉及行政审核）→ 获签与入境。",
+      "policy_notes": "签证与入境政策随时可能调整；Robotics / AI 等方向可能遇到补充材料或行政审核。此处只记录个人调研结论，一切以使领馆与学校官方通知为准。",
+      "documents_notes": "护照、I-20、录取信、财力证明、SEVIS 缴费收据、DS-160 确认页、照片等；以官方清单为准逐项核对。",
+      "source_url": "",
+      "verified": false,
+      "last_verified": null,
+      "notes": "示例流程记录；费用与材料要求需核验后填写。"
+    },
+    {
+      "id": "hk-student-visa",
+      "country": "Hong Kong SAR",
+      "visa_type": "学生签证 Student Visa",
+      "status": "not_started",
+      "application_fee_usd": 0,
+      "timeline_notes": "接受 Offer → 按录取学校指引递交学生签证申请（通常经学校转交入境事务处）→ 获发签证标签 → 内地申请人另行办理逗留签注。",
+      "policy_notes": "各校办理流程与时长不同；内地居民还需办理港澳通行证及相应逗留签注。以学校国际事务处与入境事务处官方指引为准。",
+      "documents_notes": "录取信、身份证明文件、照片、财力材料等；按录取学校提供的清单核对。",
+      "source_url": "",
+      "verified": false,
+      "last_verified": null,
+      "notes": "示例流程记录；费用与材料要求需核验后填写。"
+    },
+    {
+      "id": "sg-student-pass",
+      "country": "Singapore",
+      "visa_type": "Student's Pass",
+      "status": "not_started",
+      "application_fee_usd": 0,
+      "timeline_notes": "接受 Offer → 由学校发起 Student's Pass 申请（SOLAR+ 系统）→ 获发 IPA letter → 入境后换取 Student's Pass。",
+      "policy_notes": "申请由学校发起，个人环节以学校邮件指引为准；IPA、体检等要求以 ICA 与学校官方通知为准。",
+      "documents_notes": "录取信、护照、照片、体检报告（如要求）等。",
+      "source_url": "",
+      "verified": false,
+      "last_verified": null,
+      "notes": "示例流程记录；费用与材料要求需核验后填写。"
+    }
+  ],
   "recommenders": [
     {
       "id": "dut-advisor",
@@ -140,6 +184,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "ucb-mentor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 135, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "伯克利市，旧金山湾区；BART 通往旧金山，气候温和，生活成本高。", "environment_rating": null, "living_cost_monthly_usd": 2400, "housing_notes": "校内研究生住房排队久，周边合租为主。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "EECS admissions and advising structures differ from applying directly to a PI. Verify whether supplemental fellowship materials are required."
     },
     {
@@ -165,6 +211,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "ucb-mentor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 125, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "湾区半岛，校园安静自足，免费校车接驳 Caltrain；生活成本全美前列。", "environment_rating": null, "living_cost_monthly_usd": 2600, "housing_notes": "校内社区住房竞争激烈，周边租金更高。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "The default record is CS. Create a separate ME record if applying to Mechanical Engineering; do not reuse a CS-specific SoP."
     },
     {
@@ -190,6 +238,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "ucb-mentor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 100, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "匹兹堡，校区与城市街区连成一片；冬季多雪，春秋宜人。", "environment_rating": null, "living_cost_monthly_usd": 1400, "housing_notes": "Oakland / Squirrel Hill 一带校外公寓为主，性价比高。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "RI is a strong fit for hardware-grounded work. Confirm faculty rotation and funding rules for the intended cycle."
     },
     {
@@ -214,6 +264,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "ucb-mentor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 90, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "剑桥市，查尔斯河畔，隔河即波士顿；地铁红线通勤便利，冬季寒冷。", "environment_rating": null, "living_cost_monthly_usd": 2300, "housing_notes": "剑桥 / 萨默维尔合租为主，房源紧张。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "Default track is EECS. For an ME application, use a distinct record and select dynamics/control-oriented faculty rather than editing only the school name."
     },
     {
@@ -238,6 +290,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}, {"recommender_id": "course-d", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 90, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "安娜堡经典大学城，主街与校园一体；冬季寒冷，生活节奏舒缓。", "environment_rating": null, "living_cost_monthly_usd": 1300, "housing_notes": "大学城租房市场集中，步行与校车覆盖主要居住区。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "Robotics is an interdisciplinary home unit. Highlight dynamics and deployment while retaining learning depth."
     },
     {
@@ -262,6 +316,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}, {"recommender_id": "course-d", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 105, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "亚特兰大市中心，气候温暖；校区与城区交错，出行以校车和地铁为主。", "environment_rating": null, "living_cost_monthly_usd": 1400, "housing_notes": "Midtown / Home Park 一带合租常见。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "Choose the home unit deliberately. CS can foreground learning and perception; ECE can foreground controls and embedded deployment."
     },
     {
@@ -286,6 +342,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}, {"recommender_id": "course-d", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 135, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "拉霍亚海滨校园，气候温和干燥；校区大，日常依赖校车与自驾。", "environment_rating": null, "living_cost_monthly_usd": 1900, "housing_notes": "校内研究生住房等待期长，周边 La Jolla / UTC 合租为主。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "Default record is CSE. For ECE, create a separate track and emphasize controls, onboard systems and perception."
     },
     {
@@ -310,6 +368,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}, {"recommender_id": "course-d", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 90, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "奥斯汀，近年快速扩张，夏季炎热；音乐与科技氛围浓厚。", "environment_rating": null, "living_cost_monthly_usd": 1500, "housing_notes": "校园以北与东区合租选择多，近年租金上涨明显。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "Confirm the receiving department for each prospective advisor; a faculty fit does not replace eligibility for the selected program."
     },
     {
@@ -334,6 +394,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}, {"recommender_id": "course-d", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 90, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "厄巴纳-香槟，中部平原大学城，冬季寒冷；出行靠步行与校车。", "environment_rating": null, "living_cost_monthly_usd": 1100, "housing_notes": "校园周边公寓供给充足，租金稳定。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "Compare CS and ECE faculty rosters before selecting a track; do not assume one application covers both departments."
     },
     {
@@ -358,6 +420,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}, {"recommender_id": "course-d", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 90, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "费城西费城大学城，历史街区与校园相邻；地铁与区域铁路便利。", "environment_rating": null, "living_cost_monthly_usd": 1700, "housing_notes": "大学城内高层公寓与老房合租并存。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "GRASP is interdisciplinary, but the application still needs a valid degree program and home department."
     },
     {
@@ -382,6 +446,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}, {"recommender_id": "course-d", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 120, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "纽约曼哈顿晨边高地，地铁通达全城；生活成本极高。", "environment_rating": null, "living_cost_monthly_usd": 2600, "housing_notes": "校内公寓稀缺，多数在曼哈顿上城或皇后区、布鲁克林合租。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "Safe / Pivot denotes portfolio strategy, not guaranteed admission. Direct Ph.D. admission remains highly selective."
     },
     {
@@ -405,6 +471,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}, {"recommender_id": "course-d", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 110, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "纽约布鲁克林与曼哈顿校区之间通勤；都会资源密集，成本极高。", "environment_rating": null, "living_cost_monthly_usd": 2600, "housing_notes": "合租市场为主，通勤时间是主要权衡变量。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "Confirm whether the intended PI is accepting Courant CS Ph.D. students and whether other NYU units require separate applications."
     },
     {
@@ -429,6 +497,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}, {"recommender_id": "course-d", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 90, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "西雅图大学区，气候多雨温和；临近科技园区，城市资源便利。", "environment_rating": null, "living_cost_monthly_usd": 1800, "housing_notes": "U-District 及以北居住区合租常见。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "The Allen School is exceptionally selective; treat this as a high-fit application rather than a numerical safety."
     },
     {
@@ -452,6 +522,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}, {"recommender_id": "course-d", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 90, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "洛杉矶大学公园校区，气候干燥温暖；都会区大，出行较依赖汽车。", "environment_rating": null, "living_cost_monthly_usd": 2000, "housing_notes": "校区周边与校内穿梭巴士沿线公寓为主。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "Review both Viterbi CS and other relevant engineering units; funding and application requirements may differ."
     },
     {
@@ -476,6 +548,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}, {"recommender_id": "course-d", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 75, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "马里兰学院公园，近华盛顿 DC；地铁绿线与校车连接市区。", "environment_rating": null, "living_cost_monthly_usd": 1600, "housing_notes": "College Park 及地铁沿线合租为主。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "Evaluate CS, ECE and the robotics institute ecosystem by actual advisor appointment and Ph.D. funding route."
     },
     {
@@ -500,6 +574,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "ucb-mentor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 40, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "香港岛西环，依山面海；港岛线与校车通勤，城市密度高。", "environment_rating": null, "living_cost_monthly_usd": 1600, "housing_notes": "研究生堂与校外合租并行，面积小、单价高。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "Check HKU main-round and Hong Kong PhD Fellowship Scheme timelines separately; fellowship nomination may have an earlier deadline."
     },
     {
@@ -524,6 +600,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "ucb-mentor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 40, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "沙田吐露港山腰校园，环境安静绿化多；东铁线直达市区与边境。", "environment_rating": null, "living_cost_monthly_usd": 1500, "housing_notes": "校内研究生宿舍为主，校外可选沙田、大围。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "The intended advisor may have a primary appointment outside CSE. Verify which department admits and funds the Ph.D. student."
     },
     {
@@ -549,6 +627,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "ucb-mentor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 45, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "新加坡西南肯特岗，热带气候；MRT 与校内穿梭巴士覆盖全岛通勤。", "environment_rating": null, "living_cost_monthly_usd": 1300, "housing_notes": "校内研究生宿舍与校外组屋合租并行。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "Confirm August-intake timing, scholarship coverage and whether a separate fellowship or advisor nomination is needed."
     },
     {
@@ -573,6 +653,8 @@
       ],
       "recommendations": {"required": 3, "assignments": [{"recommender_id": "dut-advisor", "status": "pending", "submitted_on": null}, {"recommender_id": "ucb-mentor", "status": "pending", "submitted_on": null}, {"recommender_id": "collab-c", "status": "pending", "submitted_on": null}]},
       "budget": {"application_fee_usd": 40, "score_report_usd": 25, "other_usd": 0, "fee_waiver": false},
+      "visa": {"status": "not_started", "notes": "", "source_url": "", "verified": false, "last_verified": null},
+      "campus": {"environment_notes": "新加坡西南裕廊，校园大而安静，绿化覆盖高；校内巴士环线通勤。", "environment_rating": null, "living_cost_monthly_usd": 1300, "housing_notes": "校内研究生宿舍为主，进市区约一小时。", "safety_notes": "", "safety_rating": null, "source_url": "", "verified": false, "last_verified": null},
       "notes": "Create a school-specific record for the actual admitting school. The generic robotics label must be replaced before compiling a final SoP."
     }
   ]

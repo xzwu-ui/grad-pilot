@@ -80,6 +80,10 @@
     "gmail_imports": {
       "type": "array",
       "items": {"$ref": "#/$defs/gmailImport"}
+    },
+    "visa_records": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/visaRecord"}
     }
   },
   "additionalProperties": true,
@@ -219,7 +223,9 @@
         "notes": {"type": "string"},
         "funding": {"$ref": "#/$defs/funding"},
         "application_policy": {"$ref": "#/$defs/applicationPolicy"},
-        "decision": {"$ref": "#/$defs/decision"}
+        "decision": {"$ref": "#/$defs/decision"},
+        "visa": {"$ref": "#/$defs/schoolVisa"},
+        "campus": {"$ref": "#/$defs/campusLife"}
       },
       "additionalProperties": true
     },
@@ -254,6 +260,51 @@
         "decision_date": {"$ref": "#/$defs/nullableDate"},
         "response_deadline": {"$ref": "#/$defs/nullableDate"},
         "notes": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "visaRecord": {
+      "type": "object",
+      "required": ["id", "country", "visa_type", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "country": {"type": "string", "minLength": 1},
+        "visa_type": {"type": "string", "minLength": 1},
+        "status": {"enum": ["not_started", "preparing", "applied", "approved", "not_required"]},
+        "application_fee_usd": {"type": "number", "minimum": 0},
+        "timeline_notes": {"type": "string"},
+        "policy_notes": {"type": "string"},
+        "documents_notes": {"type": "string"},
+        "source_url": {"type": "string"},
+        "verified": {"type": "boolean"},
+        "last_verified": {"$ref": "#/$defs/nullableDate"},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "schoolVisa": {
+      "type": "object",
+      "properties": {
+        "status": {"enum": ["not_started", "preparing", "applied", "approved", "not_required"]},
+        "notes": {"type": "string"},
+        "source_url": {"type": "string"},
+        "verified": {"type": "boolean"},
+        "last_verified": {"$ref": "#/$defs/nullableDate"}
+      },
+      "additionalProperties": true
+    },
+    "campusLife": {
+      "type": "object",
+      "properties": {
+        "environment_notes": {"type": "string"},
+        "environment_rating": {"anyOf": [{"type": "integer", "minimum": 1, "maximum": 5}, {"type": "null"}]},
+        "living_cost_monthly_usd": {"type": "number", "minimum": 0},
+        "housing_notes": {"type": "string"},
+        "safety_notes": {"type": "string"},
+        "safety_rating": {"anyOf": [{"type": "integer", "minimum": 1, "maximum": 5}, {"type": "null"}]},
+        "source_url": {"type": "string"},
+        "verified": {"type": "boolean"},
+        "last_verified": {"$ref": "#/$defs/nullableDate"}
       },
       "additionalProperties": true
     },

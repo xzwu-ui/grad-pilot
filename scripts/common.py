@@ -143,6 +143,11 @@ def validate_database(data: dict[str, Any], schema_path: Path = SCHEMA_PATH) -> 
                 f"gmail_imports: unknown school: {item.get('school_id', '<unknown>')}"
             )
 
+    visa_ids = [record.get("id") for record in data.get("visa_records", [])]
+    duplicate_visas = duplicates(visa_ids)
+    if duplicate_visas:
+        messages.append(f"visa_records: duplicate ids: {', '.join(duplicate_visas)}")
+
     document_ids = [document.get("id") for document in data.get("documents", [])]
     duplicate_documents = duplicates(document_ids)
     if duplicate_documents:

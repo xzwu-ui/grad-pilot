@@ -580,6 +580,67 @@ try {
   await cdp.evaluate("document.querySelector('.nav-item[data-view=\"outreach\"]').click()");
   await waitFor(cdp, "document.querySelectorAll('.radar-card').length === 12");
 
+  await cdp.evaluate("document.querySelector('.nav-item[data-view=\"visa\"]').click()");
+  await waitFor(cdp, "document.querySelectorAll('.visa-record-card').length === 3");
+  assert.ok(await cdp.evaluate("document.querySelectorAll('#view-visa .outreach-summary > div').length === 4"));
+  assert.equal(await cdp.evaluate("document.querySelectorAll('#view-visa table tbody tr').length"), 20);
+  assert.ok(await cdp.evaluate("document.querySelectorAll('#view-visa .visa-record-card p').length >= 9"));
+  await cdp.evaluate(`(() => {
+    const select = document.querySelector('#view-visa [data-action="visa-status"]');
+    select.value = 'approved';
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  })()`);
+  await waitFor(cdp, "JSON.parse(localStorage.getItem('gradpilot.workspace.v1')).visa_records.some(record => record.status === 'approved')");
+  await cdp.evaluate(`(() => {
+    const select = document.querySelector('#view-visa [data-action="school-visa-status"][data-id="berkeley"]');
+    select.value = 'preparing';
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  })()`);
+  await waitFor(cdp, "JSON.parse(localStorage.getItem('gradpilot.workspace.v1')).schools.find(s => s.id === 'berkeley').visa.status === 'preparing'");
+  await screenshot(cdp, "dashboard-visa.png");
+  await cdp.evaluate("document.querySelector('[data-action=\"add-visa\"]').click()");
+  await cdp.evaluate(`(() => {
+    const form = document.getElementById('visa-form');
+    const values = {
+      country: 'Testland', id: 'testland-visa', visa_type: 'Research Permit',
+      status: 'preparing', application_fee_usd: '42.5',
+      timeline_notes: 'Offer → permit', policy_notes: 'Policy watch', documents_notes: 'Passport',
+      source_url: 'https://example.edu/visa', notes: 'smoke'
+    };
+    for (const [name, value] of Object.entries(values)) form.elements[name].value = value;
+    form.elements.verified.click();
+    form.querySelector('button[type="submit"]').click();
+  })()`);
+  await waitFor(cdp, "JSON.parse(localStorage.getItem('gradpilot.workspace.v1')).visa_records.length === 4");
+  assert.ok(await cdp.evaluate("JSON.parse(localStorage.getItem('gradpilot.workspace.v1')).visa_records.find(record => record.id === 'testland-visa').verified"));
+
+  await cdp.evaluate("document.querySelector('.nav-item[data-view=\"campus\"]').click()");
+  await waitFor(cdp, "document.querySelectorAll('#view-campus > .table-wrap tbody tr').length === 20");
+  assert.ok(await cdp.evaluate("document.querySelectorAll('#view-campus svg').length >= 1"));
+  assert.ok(await cdp.evaluate("document.querySelectorAll('#view-campus .data-table').length === 1"));
+  await cdp.evaluate(`(() => {
+    const input = document.querySelector('#view-campus [data-action="campus-cost"][data-id="berkeley"]');
+    input.value = '2550';
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  })()`);
+  await waitFor(cdp, "JSON.parse(localStorage.getItem('gradpilot.workspace.v1')).schools.find(s => s.id === 'berkeley').campus.living_cost_monthly_usd === 2550");
+  await screenshot(cdp, "dashboard-campus.png");
+  await cdp.evaluate("document.querySelector('#view-campus [data-action=\"edit-campus\"][data-id=\"berkeley\"]').click()");
+  await cdp.evaluate(`(() => {
+    const form = document.getElementById('campus-form');
+    form.elements.environment_notes.value = 'Bay Area, BART access';
+    form.elements.environment_rating.value = '4';
+    form.elements.safety_rating.value = '3';
+    form.elements.safety_notes.value = 'Reviewed the annual security report';
+    form.elements.source_url.value = 'https://example.edu/safety';
+    form.elements.verified.click();
+    form.querySelector('button[type="submit"]').click();
+  })()`);
+  await waitFor(cdp, `(() => {
+    const campus = JSON.parse(localStorage.getItem('gradpilot.workspace.v1')).schools.find(s => s.id === 'berkeley').campus;
+    return campus.environment_rating === 4 && campus.safety_rating === 3 && campus.verified && campus.living_cost_monthly_usd === 2550;
+  })()`);
+
   const exportedWorkspace = await cdp.evaluate("localStorage.getItem('gradpilot.workspace.v1')");
   await writeFile(join(OUT, "browser-smoke-export.json"), `${JSON.stringify(JSON.parse(exportedWorkspace), null, 2)}\n`, "utf8");
   execFileSync(process.env.PYTHON || "python", [

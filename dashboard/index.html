@@ -58,8 +58,14 @@
         <button class="nav-item" data-action="navigate" data-view="budget">
           <span class="nav-index">09</span><span>半 DIY 预算</span><span class="nav-en">BUDGET</span>
         </button>
+        <button class="nav-item" data-action="navigate" data-view="visa">
+          <span class="nav-index">10</span><span>签证与政策</span><span class="nav-en">VISA</span>
+        </button>
+        <button class="nav-item" data-action="navigate" data-view="campus">
+          <span class="nav-index">11</span><span>校园与生活</span><span class="nav-en">CAMPUS</span>
+        </button>
         <button class="nav-item" data-action="navigate" data-view="assets">
-          <span class="nav-index">10</span><span>资产与设置</span><span class="nav-en">ASSETS</span>
+          <span class="nav-index">12</span><span>资产与设置</span><span class="nav-en">ASSETS</span>
         </button>
       </nav>
 
@@ -97,10 +103,12 @@
       <section id="view-lor" class="view-panel" aria-label="推荐信矩阵" hidden></section>
       <section id="view-outreach" class="view-panel" aria-label="套磁研究追踪" hidden></section>
       <section id="view-budget" class="view-panel" aria-label="半 DIY 预算" hidden></section>
+      <section id="view-visa" class="view-panel" aria-label="签证与政策" hidden></section>
+      <section id="view-campus" class="view-panel" aria-label="校园与生活" hidden></section>
       <section id="view-assets" class="view-panel" aria-label="资产与设置" hidden></section>
 
       <footer class="workspace-footer">
-        <span>GRADPILOT / BUILD 0.4.0</span>
+        <span>GRADPILOT / BUILD 0.5.0</span>
         <span>评分仅表示信息匹配与准备度；示例截止日带 ~ 标记，提交前必须核验官网。</span>
       </footer>
     </main>
@@ -328,6 +336,51 @@
         <label class="span-2">推荐依据<textarea name="relationship" rows="3" placeholder="科研独立性、真机部署贡献等"></textarea></label>
       </div>
       <div class="dialog-actions"><button type="button" class="button button-ghost" data-action="close-dialog" data-dialog="recommender-dialog">取消</button><button class="button button-primary" type="submit">保存推荐人</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="visa-dialog" class="dialog dialog-wide">
+    <form id="visa-form" method="post">
+      <div class="dialog-head"><div><span class="eyebrow">VISA / POLICY RECORD</span><h2 id="visa-dialog-title">添加签证记录</h2></div><button type="button" class="icon-button" data-action="close-dialog" data-dialog="visa-dialog" aria-label="关闭">×</button></div>
+      <input type="hidden" name="original_id">
+      <div class="form-grid">
+        <label>国家 / 地区<input name="country" required placeholder="United States"></label>
+        <label>签证类型<input name="visa_type" required placeholder="F-1 / Student's Pass / Student Visa"></label>
+        <label>唯一 ID<input name="id" required pattern="[a-z0-9][a-z0-9\-]*" placeholder="us-f1"></label>
+        <label>整体状态<select name="status"><option value="not_started">未开始</option><option value="preparing">准备材料中</option><option value="applied">已递交申请</option><option value="approved">已获签</option><option value="not_required">不需要签证</option></select></label>
+        <label>申请费 / 官方费用 USD<input type="number" name="application_fee_usd" min="0" step="0.01" value="0"><small>规划字段；请在官方渠道核实金额后填写。</small></label>
+        <label>最近人工核验日期<input type="date" name="last_verified"></label>
+        <label class="span-2">流程时间线<textarea name="timeline_notes" rows="3" placeholder="例如：接受 Offer → 签发 I-20 → 缴费 → 预约面签 → 获签"></textarea></label>
+        <label class="span-2">政策观察笔记<textarea name="policy_notes" rows="3" placeholder="记录与自己相关的政策变化、审核周期、官方说明与日期；只写可溯源的调研结论"></textarea></label>
+        <label class="span-2">材料清单笔记<textarea name="documents_notes" rows="3" placeholder="按官方清单逐项记录：护照、录取文件、财力证明、缴费收据等"></textarea></label>
+        <label class="span-2">官方来源 URL<input type="url" name="source_url" placeholder="https://..."></label>
+        <label class="check-label"><input type="checkbox" name="verified"> 已对照官方来源人工核验</label>
+        <label class="span-2">备注<textarea name="notes" rows="2"></textarea></label>
+      </div>
+      <div class="dialog-actions"><button type="button" class="button button-ghost" data-action="close-dialog" data-dialog="visa-dialog">取消</button><button class="button button-primary" type="submit">保存签证记录</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="campus-dialog" class="dialog dialog-wide">
+    <form id="campus-form" method="post">
+      <div class="dialog-head"><div><span class="eyebrow">CAMPUS LIFE RECORD</span><h2 id="campus-dialog-title">编辑校园与生活</h2></div><button type="button" class="icon-button" data-action="close-dialog" data-dialog="campus-dialog" aria-label="关闭">×</button></div>
+      <input type="hidden" name="school_id">
+      <div class="form-grid">
+        <h3 class="span-2 form-section">环境 / Environment</h3>
+        <label class="span-2">校园与城市环境笔记<textarea name="environment_notes" rows="3" placeholder="城市规模、气候、通勤方式、周边生活等个人调研"></textarea></label>
+        <label>环境评价（1–5，可留空）<input type="number" name="environment_rating" min="1" max="5" step="1" placeholder="留空 = 未评价"></label>
+        <h3 class="span-2 form-section">成本 / Cost</h3>
+        <label>预估月生活成本 USD<input type="number" name="living_cost_monthly_usd" min="0" step="10" value="0"><small>规划估计（含住宿、饮食、交通等）；以自己的调研为准。</small></label>
+        <label class="span-2">住宿笔记<textarea name="housing_notes" rows="3" placeholder="校内宿舍概率、周边租房区域、通勤时间等"></textarea></label>
+        <h3 class="span-2 form-section">安全 / Safety</h3>
+        <label>安全评价（1–5，可留空）<input type="number" name="safety_rating" min="1" max="5" step="1" placeholder="留空 = 未评价"></label>
+        <label class="span-2">安全调研笔记<textarea name="safety_notes" rows="3" placeholder="记录 Clery 年报、校方安全通报、夜间交通等一手来源与结论；不写无来源的印象"></textarea></label>
+        <h3 class="span-2 form-section">来源 / Sources</h3>
+        <label class="span-2">调研来源 URL<input type="url" name="source_url" placeholder="https://..."></label>
+        <label class="check-label"><input type="checkbox" name="verified"> 已按来源人工核验本节内容</label>
+        <label>最近核验日期<input type="date" name="last_verified"></label>
+      </div>
+      <div class="dialog-actions"><button type="button" class="button button-ghost" data-action="close-dialog" data-dialog="campus-dialog">取消</button><button class="button button-primary" type="submit">保存校园与生活记录</button></div>
     </form>
   </dialog>
 
